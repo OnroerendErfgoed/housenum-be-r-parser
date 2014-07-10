@@ -324,8 +324,8 @@ class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
             self, huis, begin, -1, -1, -1, huis, einde)
 
     def __str__(self):
-        return str(self.getHuisnummer()) + "/"
-        + str(self.getBegin()) + "-" + str(self.getEinde())
+        return str(self.getHuisnummer()) + "/" +\
+            str(self.getBegin()) + "-" + str(self.getEinde())
 
     def split(self):
         r = list()
@@ -386,8 +386,8 @@ class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
             self, huis, -1, -1, begin, -1, huis, -1, -1, einde)
 
     def __str__(self):
-        return str(self.getHuisnummer()) + " bus "
-        + str(self.getBegin()) + "-" + str(self.getEinde())
+        return str(self.getHuisnummer()) + " bus " +\
+            str(self.getBegin()) + "-" + str(self.getEinde())
 
     '''
     :returns: A list of :class: `KVDUtil_HnrBusnummer`.
