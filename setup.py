@@ -4,21 +4,25 @@ import os
 import sys
 
 
-from setuptools import setup, find_packages
+from setuptools import setup, 
+
+here = os.path.abspath(os.path.dirname(__file__))
+README = open(os.path.join(here, 'README.rst')).read()
 
 packages = [
     'housenum-be-r-parser',
 ]
 
 requires = [
-    'nose'
+    'nose',
+    'coverage',
 ]
 
 setup(
     name='housenum-be-r-parser',
     version='',
     description='',
-    long_description='',
+    long_description=README,
     author='Onroerend Erfgoed',
     author_email='ict@onroerenderfgoed.be',
     url='http://github.com/onroerenderfgoed/housenum-be-r-parser',
