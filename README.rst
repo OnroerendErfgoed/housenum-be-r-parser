@@ -10,3 +10,7 @@ Bindings for the housenum library
 .. image:: https://coveralls.io/repos/OnroerendErfgoed/housenum-be-r-parser/badge.png?branch=master 
         :target: https://coveralls.io/r/OnroerendErfgoed/housenum-be-r-parse?branch=master
 
+Description
+------------
+
+Splits ranges of Belgian house numbers into individual ones and vice versa
