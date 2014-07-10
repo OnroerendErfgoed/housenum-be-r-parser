@@ -21,7 +21,7 @@ requires = [
 setup(
     name='housenum-be-r-parser',
     version='',
-    description='',
+    description='Splits ranges of Belgian house numbers into individual ones and vice versa',
     long_description=README,
     author='Onroerend Erfgoed',
     author_email='ict@onroerenderfgoed.be',
