@@ -47,19 +47,24 @@ Class for a readingerror in the housenumberreader.
 
 class ReadException(Element):
 
-    def __init__(self, error, input=""):
+    def __init__(self, error, input="", flag=1):
         self.error = error
         self.input = input
+        self.flag=flag
         Element.__init__(self, -1)
 
     def isException(self):
         return True
 
     def split(self):
-        return self
+        if self.flag in [1,2]:
+            return self
 
     def __str__(self):
-        return self.input
+        if self.flag == 1:
+            return self.input
+        elif self.flag == 2:
+            return self.error
 
 
 '''
@@ -73,7 +78,7 @@ class EnkelElement(Element):
         return False
 
     def split(self):
-        return [self]
+        return self
 
     '''
      :returns: The housenumber attribute of the object.
@@ -396,8 +401,8 @@ class Reader():
     :param input: A :class: `String`.
     :returns: A list from of the input.
     '''
-    def readString(self, input, spring):
-        return self.readArray(str(input).split(","), spring)
+    def readString(self, input, spring, flag):
+        return self.readArray(str(input).split(","), spring, flag)
 
     '''
     :param inputs: A String containing representations of housenumberobjects
@@ -405,11 +410,11 @@ class Reader():
     :returns: A list of :class: `EnkelElement` and/or
         :class: `ReeksElement`.
     '''
-    def readArray(self, inputs, spring):
+    def readArray(self, inputs, spring, flag):
         result = list()
         for input in inputs:
             input = input.strip()
-            result.append(self.readNummer(input, spring))
+            result.append(self.readNummer(input, spring, flag))
         return result
 
     '''
@@ -417,7 +422,7 @@ class Reader():
     :returns: A :class: `Element` OR
         an exception in case of incorrect input.
     '''
-    def readNummer(self, input, spring):
+    def readNummer(self, input, spring, flag):
         if '-' in input:
             if 'bus' in input:
                 input = input.split()
@@ -468,7 +473,8 @@ class Reader():
             else:
                 return ReadException(
                     "Could not parse/understand",
-                    input)
+                    input,
+                    flag)
 
 
 '''
@@ -660,8 +666,8 @@ class HuisnummerFacade():
         housenumber series representations
     :returns: A list of :class: `EnkelElement`
     '''
-    def split(self, input, spring=''):
-        nummers = self.stringToNummers(input, spring)
+    def split(self, input, spring='', flag=1):
+        nummers = self.stringToNummers(input, spring, flag)
         reeks = self.splitten(nummers)
         return self.flatten(reeks)
 
@@ -670,8 +676,8 @@ class HuisnummerFacade():
         housenumber series representations.
     :returns: A list of housenumber and/or housenumber series representations.
     '''
-    def stringToNummers(self, input, spring):
-        return self.reader.readString(input, spring)
+    def stringToNummers(self, input, spring, flag):
+        return self.reader.readString(input, spring, flag)
 
     '''
     :param input: A list of :class: `ReeksElement`.
@@ -688,8 +694,8 @@ class HuisnummerFacade():
         housenumber series representations.
     :returns: A list of :class: `EnkelElement`
     '''
-    def merge(self, input, spring=''):
-        reeksen = self.stringToNummers(input, spring)
+    def merge(self, input, spring='', flag=1):
+        reeksen = self.stringToNummers(input, spring, flag)
         nummers = self.splitten(reeksen)
         nummers = self.flatten(nummers)
         result = self.merger.group(nummers)
@@ -704,8 +710,9 @@ class HuisnummerFacade():
         for x in input:
             if x .__class__ == list and x != []:
                 for y in x:
-                    r.append(y)
+                    if y != None:
+                        r.append(y)
             else:
-                if x != []:
+                if x != [] and x != None:
                     r.append(x)
         return r

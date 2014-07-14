@@ -215,6 +215,24 @@ class HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('A', str(huisnummers[0]))
         self.assertEqual('1/3', str(huisnummers[1]))
         self.assertEqual('?', str(huisnummers[2]))
+        
+    def test_bogus_input_flag_2(self):
+        label = 'A,1/3,?'
+        flag = 2
+        huisnummers = self.facade.split(label, '', flag)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(3, len(huisnummers))
+        self.assertEqual('Could not parse/understand', str(huisnummers[0]))
+        self.assertEqual('1/3', str(huisnummers[1]))
+        self.assertEqual('Could not parse/understand', str(huisnummers[2]))
+        
+    def test_bogus_input_flag_3(self):
+        label = 'A,1/3,?'
+        flag = 3
+        huisnummers = self.facade.split(label, '', flag)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(1, len(huisnummers))
+        self.assertEqual('1/3', str(huisnummers[0]))
 
     def test_input_with_spaces(self):
         label = ' A , 1/3 , 5 - 7 '
