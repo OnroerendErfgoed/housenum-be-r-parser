@@ -113,7 +113,6 @@ class HuisnummerFacadeTests(unittest.TestCase):
     def test_huisnummer_bereik_speciaal(self):
         label = '25,26-31'
         huisnummers = self.facade.split(label)
-        print huisnummers[1]
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 7)
         self.assertEqual('25', str(huisnummers[0]))
