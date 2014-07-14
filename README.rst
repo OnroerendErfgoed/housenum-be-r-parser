@@ -1,7 +1,7 @@
 Housenum-be-r-parser
 =====================
 
-Bindings for the housenum library
+A small library for merging and splitting sequences of Belgian housenumbers.
     
 .. image:: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser.png?branch=master
         :target: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser
@@ -13,4 +13,4 @@ Bindings for the housenum library
 Description
 ------------
 
-Splits ranges of Belgian house numbers into individual ones and vice versa
+Splits ranges of Belgian house numbers into individual ones and vice versa.
