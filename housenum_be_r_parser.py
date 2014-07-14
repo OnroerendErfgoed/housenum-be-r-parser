@@ -1,6 +1,5 @@
 import abc
 import re
-from compiler.ast import flatten
 
 '''
 A housenumber element.
@@ -393,31 +392,24 @@ Klasse die een reeks huisnummers inleest. Bijvoorbeeld:
 
 
 class Reader():
-
-    def __init__(self, flag):
-        self.flag = flag
-
     '''
     :param input: A :class: `String`.
-    :param flag: A :class: `Integer` flag voor error handling.
     :returns: A list from of the input.
     '''
-    def readString(self, input, spring, flag=1):
-        return self.readArray(str(input).split(","), spring, flag)
+    def readString(self, input, spring):
+        return self.readArray(str(input).split(","), spring)
 
     '''
     :param inputs: A String containing representations of housenumberobjects
         and/or housenumber series objects.
-    :param flag: A :class: `Integer` flag voor error handling.
     :returns: A list of :class: `EnkelElement` and/or
         :class: `ReeksElement`.
     '''
-    def readArray(self, inputs, spring, flag=1):
+    def readArray(self, inputs, spring):
         result = list()
         for input in inputs:
             input = input.strip()
-            element = self.readNummer(input, spring)
-            result.append(element)
+            result.append(self.readNummer(input, spring))
         return result
 
     '''
@@ -659,9 +651,8 @@ eg:
 
 
 class HuisnummerFacade():
-    def __init__(self, flag=1):
-        self.flag = flag
-        self.reader = Reader(self.flag)
+    def __init__(self):
+        self.reader = Reader()
         self.merger = Merger()
 
     '''
@@ -680,7 +671,7 @@ class HuisnummerFacade():
     :returns: A list of housenumber and/or housenumber series representations.
     '''
     def stringToNummers(self, input, spring):
-        return self.reader.readString(input, spring, self.flag)
+        return self.reader.readString(input, spring)
 
     '''
     :param input: A list of :class: `ReeksElement`.
