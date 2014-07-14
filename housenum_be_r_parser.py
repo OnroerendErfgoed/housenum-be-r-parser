@@ -42,7 +42,7 @@ class KVDUtil_HnrElement():
 
 
 '''
- Klasse voor een leesfout in de huisnummerlezer.
+Class for a readingerror in the housenumberreader.
 '''
 
 
@@ -75,13 +75,13 @@ class KVDUtil_HnrEnkelElement(KVDUtil_HnrElement):
         return [self]
 
     '''
-     :returns: integer het huisnummer van dit element
+     :returns: The housenumber attribute of the object.
     '''
     def getHuisnummer(self):
         return self.getData(0)
 
 '''
-A simple housenumber. bijv: 13 of 15.
+A simple housenumber. eg: 13 of 15.
 '''
 
 
@@ -94,7 +94,7 @@ class KVDUtil_HnrHuisnummer(KVDUtil_HnrEnkelElement):
         return str(self.getHuisnummer())
 
 '''
-A housenumber with biselement. bijv "3/1" of "21/5"
+A housenumber with biselement. eg: "3/1" of "21/5"
 '''
 
 
@@ -104,7 +104,7 @@ class KVDUtil_HnrBiselement(KVDUtil_HnrEnkelElement):
         return str(self.getData(self.bisIndex))
 
 '''
-A housenumber with bisnummer. bijv "3/1" of "21/5"
+A housenumber with bisnummer. eg: "3/1" of "21/5"
 '''
 
 
@@ -119,7 +119,7 @@ class KVDUtil_HnrBisnummer(KVDUtil_HnrBiselement):
 
 
 '''
-A housenumber with busnummer. bijv "3 bus 1" of "53 bus 5"
+A housenumber with busnummer. eg: "3 bus 1" of "53 bus 5"
 '''
 
 
@@ -133,7 +133,7 @@ class KVDUtil_HnrBusnummer(KVDUtil_HnrBiselement):
         return str(self.getHuisnummer()) + " bus " + self.getBiselement()
 
 '''
-A housenumber with busletter. bijv "3 bus A" of "53 bus D"
+A housenumber with busletter. eg: "3 bus A" of "53 bus D"
  '''
 
 
@@ -146,7 +146,7 @@ class KVDUtil_HnrBusletter(KVDUtil_HnrBiselement):
         return self.getHuisnummer() + " bus " + self.getBiselement()
 
 '''
-A housenumber with bisletter. bijv "3A" of "53D"
+A housenumber with bisletter. eg: "3A" of "53D"
 '''
 
 
@@ -189,17 +189,17 @@ class KVDUtil_HnrReeksElement(KVDUtil_HnrEnkelElement):
 
 '''
 A series of housenumbers.
-bijv "33, 35, 37" -> "33-37"
-bijv "33, 34, 35, 36" -> "33-36"
-bijv "32, 33, 34, 35, 36"-> "32, 33-36"
+eg: "33, 35, 37" -> "33-37"
+eg: "33, 34, 35, 36" -> "33-36"
+eg: "32, 33, 34, 35, 36"-> "32, 33-36"
 '''
 
 
 class KVDUtil_HnrHuisnummerReeks(KVDUtil_HnrReeksElement):
 
     '''
-     :param begin: Integer first housenumber of the series.
-     :param einde: Integer last housenumber of the series.
+     :param begin: First housenumber of the series.
+     :param einde: Last housenumber of the series.
     '''
     def __init__(self, begin, einde, spring=''):
         self.beginIndex = 0
@@ -227,7 +227,7 @@ class KVDUtil_HnrHuisnummerReeks(KVDUtil_HnrReeksElement):
 
 '''
 A series of bisnummers.
-  bijv "33/1, 32/2, 33/3" -> "33/1-3"
+  eg: "33/1, 32/2, 33/3" -> "33/1-3"
 '''
 
 
@@ -266,7 +266,7 @@ class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
         return res
 
 '''
-Een reeks van bisletters.
+A series of bisletters.
 '''
 
 
@@ -305,7 +305,7 @@ class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
 
 '''
  Een reeks van busnummers.
-    bijv "33 bus 1, 32 bus 2, 33 bus 3" -> "33 bus 1-3"
+    eg: "33 bus 1, 32 bus 2, 33 bus 3" -> "33 bus 1-3"
 '''
 
 
@@ -345,8 +345,8 @@ class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
 
 
 '''
- Een reeks van busletters.
-    bijv "33 bus A, 32 bus B, 33 bus C" -> "33 bus A-C"
+A series of busletters.
+    eg: "33 bus A, 32 bus B, 33 bus C" -> "33 bus A-C"
 '''
 
 
@@ -384,9 +384,9 @@ class KVDUtil_HnrBusletterReeks(KVDUtil_HnrReeksElement):
         return res
 '''
 Klasse die een reeks huisnummers inleest. Bijvoorbeeld:
-    "23 bus 5, 23 bus 6" -> array (Busnummer "23 bus 5", Busnummer "23 B-6")
-    "23", "24 bus 2" -> array (Huisnummer "23", Busnummer "24 bus 2")
-    "25-27" -> array(Huisnummerreeks "25, 26-27")
+ eg: "23 bus 5, 23 bus 6" -> array (Busnummer "23 bus 5", Busnummer "23 B-6")
+ eg: "23", "24 bus 2" -> array (Huisnummer "23", Busnummer "24 bus 2")
+ eg: "25-27" -> array(Huisnummerreeks "25, 26-27")
 '''
 
 
@@ -660,9 +660,9 @@ class KVDutil_HnrSpeedMerger():
 
 
 '''
-Deze class dient om huisnummerlabels uit te splitsen
-naar de indivduele labels of van individuele labels
-terug samen te voegen naar een compactere notatie bv.:
+This class is used to split housenumberlabels into individual labels 
+or to join individual labels into a more compact representation. 
+eg:
 <code>
     facade = new KVDutil_HuisnummerFacade( );
     huisnummers = facade.split( '15-21' );
