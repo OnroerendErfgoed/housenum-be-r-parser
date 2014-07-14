@@ -9,7 +9,7 @@ This can be a housenumber, a housenumber series, readingerror, etc.
 '''
 
 
-class KVDUtil_HnrElement():
+class Element():
 
     '''
     :param h1: Integer first huisnummer.
@@ -46,12 +46,12 @@ Class for a readingerror in the housenumberreader.
 '''
 
 
-class KVDUtil_HnrReadException(KVDUtil_HnrElement):
+class ReadException(Element):
 
     def __init__(self, error, input=""):
         self.error = error
         self.input = input
-        KVDUtil_HnrElement.__init__(self, -1)
+        Element.__init__(self, -1)
 
     def isException(self):
         return True
@@ -68,7 +68,7 @@ An abstract superclass for housenumbers.
 '''
 
 
-class KVDUtil_HnrEnkelElement(KVDUtil_HnrElement):
+class EnkelElement(Element):
 
     def isException(self):
         return False
@@ -87,10 +87,10 @@ A simple housenumber. eg: 13 of 15.
 '''
 
 
-class KVDUtil_HnrHuisnummer(KVDUtil_HnrEnkelElement):
+class Huisnummer(EnkelElement):
 
     def __init__(self, nummer):
-        KVDUtil_HnrEnkelElement.__init__(self, nummer)
+        EnkelElement.__init__(self, nummer)
 
     def __str__(self):
         return str(self.getHuisnummer())
@@ -100,7 +100,7 @@ A housenumber with biselement. eg: "3/1" of "21/5"
 '''
 
 
-class KVDUtil_HnrBiselement(KVDUtil_HnrEnkelElement):
+class Biselement(EnkelElement):
 
     def getBiselement(self):
         return str(self.getData(self.bisIndex))
@@ -110,11 +110,11 @@ A housenumber with bisnummer. eg: "3/1" of "21/5"
 '''
 
 
-class KVDUtil_HnrBisnummer(KVDUtil_HnrBiselement):
+class Bisnummer(Biselement):
 
     def __init__(self, huis, bis):
         self.bisIndex = 1
-        KVDUtil_HnrBiselement.__init__(self, huis, bis)
+        Biselement.__init__(self, huis, bis)
 
     def __str__(self):
         return str(self.getHuisnummer()) + "/" + self.getBiselement()
@@ -125,11 +125,11 @@ A housenumber with busnummer. eg: "3 bus 1" of "53 bus 5"
 '''
 
 
-class KVDUtil_HnrBusnummer(KVDUtil_HnrBiselement):
+class Busnummer(Biselement):
 
     def __init__(self, huis, bus):
         self.bisIndex = 3
-        KVDUtil_HnrBiselement.__init__(self, huis, -1, -1, bus)
+        Biselement.__init__(self, huis, -1, -1, bus)
 
     def __str__(self):
         return str(self.getHuisnummer()) + " bus " + self.getBiselement()
@@ -139,10 +139,10 @@ A housenumber with busletter. eg: "3 bus A" of "53 bus D"
  '''
 
 
-class KVDUtil_HnrBusletter(KVDUtil_HnrBiselement):
+class Busletter(Biselement):
     def __init__(self, huis, bus):
         self.bisIndex = 4
-        KVDUtil_HnrBiselement.__init__(self, huis, -1, -1, -1, bus)
+        Biselement.__init__(self, huis, -1, -1, -1, bus)
 
     def __str__(self):
         return str(self.getHuisnummer()) + " bus " + self.getBiselement()
@@ -152,11 +152,11 @@ A housenumber with bisletter. eg: "3A" of "53D"
 '''
 
 
-class KVDUtil_HnrBisletter(KVDUtil_HnrBiselement):
+class Bisletter(Biselement):
 
     def __init__(self, huis, bis):
         self.bisIndex = 2
-        KVDUtil_HnrBiselement.__init__(self, huis, -1, bis)
+        Biselement.__init__(self, huis, -1, bis)
 
     def __str__(self):
         return str(self.getHuisnummer()) + self.getBiselement()
@@ -167,7 +167,7 @@ Abstract class of all series of housenumbers.
 '''
 
 
-class KVDUtil_HnrReeksElement(KVDUtil_HnrEnkelElement):
+class ReeksElement(EnkelElement):
 
     def getBegin(self):
         return self.getData(self.beginIndex)
@@ -197,7 +197,7 @@ eg: "32, 33, 34, 35, 36"-> "32, 33-36"
 '''
 
 
-class KVDUtil_HnrHuisnummerReeks(KVDUtil_HnrReeksElement):
+class HuisnummerReeks(ReeksElement):
 
     '''
      :param begin: First housenumber of the series.
@@ -207,14 +207,14 @@ class KVDUtil_HnrHuisnummerReeks(KVDUtil_HnrReeksElement):
         self.beginIndex = 0
         self.eindeIndex = 5
         self.spring = spring
-        KVDUtil_HnrReeksElement.__init__(self, begin, -1, -1, -1, -1, einde)
+        ReeksElement.__init__(self, begin, -1, -1, -1, -1, einde)
 
     def __str__(self):
             return str(self.getBegin()) + "-" + str(self.getEinde())
 
     '''
-     :param match: A list of :class: `KVDUtil_HnrHuisnummerReeks`
-     :returns: A list of :class: `KVDUtil_HnrHuisnummer`
+     :param match: A list of :class: `HuisnummerReeks`
+     :returns: A list of :class: `Huisnummer`
     '''
     def split(self):
         begin = self.getBegin()
@@ -223,7 +223,7 @@ class KVDUtil_HnrHuisnummerReeks(KVDUtil_HnrReeksElement):
         res = []
         i = int(begin)
         while i <= int(einde):
-            res.append(KVDUtil_HnrHuisnummer(i))
+            res.append(Huisnummer(i))
             i += jump
         return res
 
@@ -233,7 +233,7 @@ A series of bisnummers.
 '''
 
 
-class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
+class BisnummerReeks(ReeksElement):
 
     '''
      :param huis: Integer housenumber.
@@ -244,7 +244,7 @@ class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
         self.beginIndex = 1
         self.eindeIndex = 6
         self.spring = spring
-        KVDUtil_HnrReeksElement.__init__(
+        ReeksElement.__init__(
             self, huis, begin, -1, -1, -1, huis, einde)
 
     def __str__(self):
@@ -252,8 +252,8 @@ class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
             str(self.getBegin()) + "-" + str(self.getEinde())
 
     '''
-    :param match: A list of :class: `KVDUtil_HnrBisnummerReeks`
-    :returns: A list of :class: `KVDUtil_HnrBisnummer`
+    :param match: A list of :class: `BisnummerReeks`
+    :returns: A list of :class: `Bisnummer`
     '''
     def split(self):
         begin = self.getBegin()
@@ -263,7 +263,7 @@ class KVDUtil_HnrBisnummerReeks(KVDUtil_HnrReeksElement):
         res = []
         i = int(begin)
         while i <= int(einde):
-            res.append(KVDUtil_HnrBisnummer(huis, i))
+            res.append(Bisnummer(huis, i))
             i += jump
         return res
 
@@ -272,7 +272,7 @@ A series of bisletters.
 '''
 
 
-class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
+class BisletterReeks(ReeksElement):
 
     '''
     :param huis: Integer housenumber
@@ -283,15 +283,15 @@ class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
         self.beginIndex = 2
         self.eindeIndex = 7
         self.spring = spring
-        KVDUtil_HnrReeksElement.__init__(
+        ReeksElement.__init__(
             self, huis, -1, begin, -1, -1, huis, -1, einde)
 
     def __str__(self):
         return str(self.getHuisnummer()) + self.getBegin() + "-" + self.getEinde()
 
     '''
-    :param match: A list of :class: `KVDUtil_HnrBisletterReeks`
-    :returns: A list of :class: `KVDUtil_HnrBisletter`
+    :param match: A list of :class: `BisletterReeks`
+    :returns: A list of :class: `Bisletter`
     '''
     def split(self):
         begin = ord(self.getBegin())
@@ -301,7 +301,7 @@ class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
         res = []
         i = int(begin)
         while i <= int(einde):
-            res.append(KVDUtil_HnrBisletter(huis, chr(i)))
+            res.append(Bisletter(huis, chr(i)))
             i += jump
         return res
 
@@ -311,7 +311,7 @@ class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
 '''
 
 
-class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
+class BusnummerReeks(ReeksElement):
 
     '''
     :param huis: Integer housenumber.
@@ -322,7 +322,7 @@ class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
         self.beginIndex = 3
         self.eindeIndex = 8
         self.spring = spring
-        KVDUtil_HnrReeksElement.__init__(
+        ReeksElement.__init__(
             self, huis, -1, -1, begin, -1, huis, -1, -1, einde)
 
     def __str__(self):
@@ -330,8 +330,8 @@ class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
             str(self.getBegin()) + "-" + str(self.getEinde())
             
     '''
-    :param match: A list of :class: `KVDUtil_HnrBusnummerReeks`
-    :returns: A list of :class: `KVDUtil_HnrBusnummer`
+    :param match: A list of :class: `BusnummerReeks`
+    :returns: A list of :class: `Busnummer`
     '''
     def split(self):
         begin = self.getBegin()
@@ -341,7 +341,7 @@ class KVDUtil_HnrBusnummerReeks(KVDUtil_HnrReeksElement):
         res = []
         i = int(begin)
         while i <= int(einde):
-            res.append(KVDUtil_HnrBusnummer(huis, i))
+            res.append(Busnummer(huis, i))
             i += jump
         return res
 
@@ -352,7 +352,7 @@ A series of busletters.
 '''
 
 
-class KVDUtil_HnrBusletterReeks(KVDUtil_HnrReeksElement):
+class BusletterReeks(ReeksElement):
     '''
      :param huis: integer huisnummer
      :param begin: integer het eerste nummer van de reeks
@@ -362,7 +362,7 @@ class KVDUtil_HnrBusletterReeks(KVDUtil_HnrReeksElement):
         self.beginIndex = 4
         self.eindeIndex = 9
         self.spring = spring
-        KVDUtil_HnrReeksElement.__init__(
+        ReeksElement.__init__(
             self, huis, -1, -1, -1, begin, huis, -1, -1, -1, einde)
 
     def __str__(self):
@@ -370,8 +370,8 @@ class KVDUtil_HnrBusletterReeks(KVDUtil_HnrReeksElement):
         + str(self.getBegin()) + "-" + str(self.getEinde())
 
     '''
-    :param match: A list of :class: `KVDUtil_HnrBisletterReeks`
-    :returns: A list of :class: `KVDUtil_HnrBisletter`
+    :param match: A list of :class: `BisletterReeks`
+    :returns: A list of :class: `Bisletter`
     '''
     def split(self):
         begin = ord(self.getBegin())
@@ -381,7 +381,7 @@ class KVDUtil_HnrBusletterReeks(KVDUtil_HnrReeksElement):
         res = []
         i = int(begin)
         while i <= int(einde):
-            res.append(KVDUtil_HnrBusletter(huis, chr(i)))
+            res.append(Busletter(huis, chr(i)))
             i += jump
         return res
 '''
@@ -392,7 +392,7 @@ Klasse die een reeks huisnummers inleest. Bijvoorbeeld:
 '''
 
 
-class KVDutil_HnrReader():
+class Reader():
 
     def __init__(self, flag):
         self.flag = flag
@@ -409,8 +409,8 @@ class KVDutil_HnrReader():
     :param inputs: A String containing representations of housenumberobjects
         and/or housenumber series objects.
     :param flag: A :class: `Integer` flag voor error handling.
-    :returns: A list of :class: `KVDUtil_HnrEnkelElement` and/or
-        :class: `KVDUtil_HnrReeksElement`.
+    :returns: A list of :class: `EnkelElement` and/or
+        :class: `ReeksElement`.
     '''
     def readArray(self, inputs, spring, flag=1):
         result = list()
@@ -422,7 +422,7 @@ class KVDutil_HnrReader():
 
     '''
     :param input: A list of housenumber representations.
-    :returns: A :class: `KVDUtil_HnrElement` OR
+    :returns: A :class: `Element` OR
         an exception in case of incorrect input.
     '''
     def readNummer(self, input, spring):
@@ -432,49 +432,49 @@ class KVDutil_HnrReader():
                 huis = input[0]
                 input = input[2].split('-')
                 if input[0].isdigit():
-                    return KVDUtil_HnrBusnummerReeks(huis, input[0], input[1], spring)
+                    return BusnummerReeks(huis, input[0], input[1], spring)
                 else:
-                    return KVDUtil_HnrBusletterReeks(huis, input[0], input[1], spring)
+                    return BusletterReeks(huis, input[0], input[1], spring)
             elif '/' in input:
                 input = input.split('/')
                 huis = input[0]
                 input = input[1]
                 input = input.split('-')
-                return KVDUtil_HnrBisnummerReeks(huis, input[0], input[1], spring)
+                return BisnummerReeks(huis, input[0], input[1], spring)
             else:
                 input = input.split('-')
                 input[0] = input[0].strip()
                 input[1] = input[1].strip()
                 if input[0].isdigit() and input[1].isdigit():
-                    return KVDUtil_HnrHuisnummerReeks(input[0], input[1], spring)
+                    return HuisnummerReeks(input[0], input[1], spring)
                 else:
                     einde = input[1]
                     input = input[0]
                     letter = input[-1:]
                     input = input[:-1]
-                    return KVDUtil_HnrBisletterReeks(input, letter, einde)
+                    return BisletterReeks(input, letter, einde)
         elif '/' in input:
             input = input.split('/')
-            return KVDUtil_HnrBisnummer(input[0], input[1])
+            return Bisnummer(input[0], input[1])
         elif '_' in input:
             input = input.split('_')
-            return KVDUtil_HnrBisnummer(input[0], input[1])
+            return Bisnummer(input[0], input[1])
         elif 'bus' in input:
             input = input.split()
             bus = input[2]
             if bus.isdigit():
-                return KVDUtil_HnrBusnummer(input[0], bus)
+                return Busnummer(input[0], bus)
             else:
-                return KVDUtil_HnrBusletter(input[0], bus)
+                return Busletter(input[0], bus)
         elif input.isdigit():
-            return KVDUtil_HnrHuisnummer(input)
+            return Huisnummer(input)
         else:
             letter = input[-1:]
             huis = input[:-1]
             if (type(letter) == str) and huis.isdigit():
-                return KVDUtil_HnrBisletter(huis, letter)
+                return Bisletter(huis, letter)
             else:
-                return KVDUtil_HnrReadException(
+                return ReadException(
                     "Could not parse/understand",
                     input)
 
@@ -484,11 +484,11 @@ class which takes a string of housenumbers and turns them into series.
 '''
 
 
-class KVDutil_HnrSpeedMerger():
+class Merger():
     '''
-    :param input: A list :class: `KVDUtil_HnrEnkelElement`.
+    :param input: A list :class: `EnkelElement`.
     :results: A dictionary containing seperated lists of
-        :class: `KVDUtil_HnrEnkelElement`.
+        :class: `EnkelElement`.
     '''
     def group(self, input):
         result = {
@@ -496,23 +496,23 @@ class KVDutil_HnrSpeedMerger():
             'bisletter': [], 'busnummer': [], 'busletter': []
         }
         for x in input:
-            if x.__class__ == KVDUtil_HnrHuisnummer:
+            if x.__class__ == Huisnummer:
                 result['huisnummer'].append(int(x.getHuisnummer()))
-            elif x.__class__ == KVDUtil_HnrBisnummer:
+            elif x.__class__ == Bisnummer:
                 result['bisnummer'].append(x)
-            elif x.__class__ == KVDUtil_HnrBisletter:
+            elif x.__class__ == Bisletter:
                 result['bisletter'].append(x)
-            elif x.__class__ == KVDUtil_HnrBusnummer:
+            elif x.__class__ == Busnummer:
                 result['busnummer'].append(x)
-            elif x.__class__ == KVDUtil_HnrBusletter:
+            elif x.__class__ == Busletter:
                 result['busletter'].append(x)
         return self.mergeNummers(result)
 
     '''
     :param inputs: A dictionary containing seperated lists of
-        :class: `KVDUtil_HnrEnkelElement`.
-    :returns list: A list of :class: `KVDUtil_HnrEnkelElement`
-        and if possible :class: `KVDUtil_HnrReeksElement`.
+        :class: `EnkelElement`.
+    :returns list: A list of :class: `EnkelElement`
+        and if possible :class: `ReeksElement`.
     '''
     def mergeNummers(self, input):
         r = []
@@ -525,8 +525,8 @@ class KVDutil_HnrSpeedMerger():
 
     '''
     :param input: List of integers.
-    :returns: List of :class: `KVDUtil_HnrHuisnummerReeks`(if possible)
-        and :class: `KVDUtil_HnrHuisnummer`.
+    :returns: List of :class: `HuisnummerReeks`(if possible)
+        and :class: `Huisnummer`.
     '''
     def mergeHuisnummers(self, input):
         def loop(input, rest, r):
@@ -538,10 +538,9 @@ class KVDutil_HnrSpeedMerger():
                         input.remove(einde)
                         einde += y
                     if begin != einde:
-                        r.append(KVDUtil_HnrHuisnummerReeks(begin, einde))
+                        r.append(HuisnummerReeks(begin, einde))
                         input.remove(einde)
                     elif y == 1 :
-                        print 'ja'
                         rest.append(einde)
                         input.remove(einde)
                     z = loop(input, rest, r)
@@ -560,17 +559,17 @@ class KVDutil_HnrSpeedMerger():
         rest = z['rest']
         r = z['r']
         for x in rest:
-            r.append(KVDUtil_HnrHuisnummer(x))
+            r.append(Huisnummer(x))
         return r
 
     '''
-    :param input: List of :class: `KVDUtil_HnrBisnummer`.
-    :returns: List of :class: `KVDUtil_HnrBisnummerReeks`(if possible)
-        and :class: `KVDUtil_HnrBisnummer`.
+    :param input: List of :class: `Bisnummer`.
+    :returns: List of :class: `BisnummerReeks`(if possible)
+        and :class: `Bisnummer`.
         OR
-    :param input: List of :class: `KVDUtil_HnrBusnummer`.
-    :returns: List of :class: `KVDUtil_HnrBusnummerReeks`(if possible)
-        and :class: `KVDUtil_HnrBusnummer`.
+    :param input: List of :class: `Busnummer`.
+    :returns: List of :class: `BusnummerReeks`(if possible)
+        and :class: `Busnummer`.
     '''
     def mergeN(self, input):
         r = {}
@@ -596,13 +595,13 @@ class KVDutil_HnrSpeedMerger():
         return result
 
     '''
-    :param input: List of :class: `KVDUtil_HnrBisletter`.
-    :returns: List of :class: `KVDUtil_HnrBisletterReeks`(if possible)
-        and :class: `KVDUtil_HnrBisletter`.
+    :param input: List of :class: `Bisletter`.
+    :returns: List of :class: `BisletterReeks`(if possible)
+        and :class: `Bisletter`.
         OR
-    :param input: List of :class: `KVDUtil_HnrBusnummer`.
-    :returns: List of :class: `KVDUtil_HnrBusletterReeks`(if possible)
-        and :class: `KVDUtil_HnrBusletter`.
+    :param input: List of :class: `Busnummer`.
+    :returns: List of :class: `BusletterReeks`(if possible)
+        and :class: `Busletter`.
     '''
     def mergeL(self, input):
         r = {}
@@ -616,7 +615,6 @@ class KVDutil_HnrSpeedMerger():
             else:
                 r[huis].append(bus)
         z = []
-        print r
         for y in r:
             begin = r[y][0]
             einde = r[y][0]
@@ -629,18 +627,18 @@ class KVDutil_HnrSpeedMerger():
         return result
 
     '''
-    :param input: A :class: `KVDUtil_HnrEnkelElement`
+    :param input: A :class: `EnkelElement`
     :results: Matching housenumber series class
     '''
     def getReeks(self, input):
-        if input.__class__ == KVDUtil_HnrBisnummer:
-            return KVDUtil_HnrBisnummerReeks
-        if input.__class__ == KVDUtil_HnrBusnummer:
-            return KVDUtil_HnrBusnummerReeks
-        if input.__class__ == KVDUtil_HnrBusletter:
-            return KVDUtil_HnrBusletterReeks
-        if input.__class__ == KVDUtil_HnrBisletter:
-            return KVDUtil_HnrBisletterReeks
+        if input.__class__ == Bisnummer:
+            return BisnummerReeks
+        if input.__class__ == Busnummer:
+            return BusnummerReeks
+        if input.__class__ == Busletter:
+            return BusletterReeks
+        if input.__class__ == Bisletter:
+            return BisletterReeks
 
 
 '''
@@ -660,16 +658,16 @@ eg:
 '''
 
 
-class KVDutil_HuisnummerFacade():
+class HuisnummerFacade():
     def __init__(self, flag=1):
         self.flag = flag
-        self.reader = KVDutil_HnrReader(self.flag)
-        self.speedmerger = KVDutil_HnrSpeedMerger()
+        self.reader = Reader(self.flag)
+        self.merger = Merger()
 
     '''
     :param input: string of housenumber and/or
         housenumber series representations
-    :returns: A list of :class: `KVDUtil_HnrEnkelElement`
+    :returns: A list of :class: `EnkelElement`
     '''
     def split(self, input, spring=''):
         nummers = self.stringToNummers(input, spring)
@@ -685,8 +683,8 @@ class KVDutil_HuisnummerFacade():
         return self.reader.readString(input, spring, self.flag)
 
     '''
-    :param input: A list of :class: `KVDUtil_HnrReeksElement`.
-    :returns: A list of :class: `KVDUtil_HnrEnkelElement`.
+    :param input: A list of :class: `ReeksElement`.
+    :returns: A list of :class: `EnkelElement`.
     '''
     def splitten(self, input):
         r = []
@@ -697,20 +695,17 @@ class KVDutil_HuisnummerFacade():
     '''
     :param input: A list of housenumber and/or
         housenumber series representations.
-    :returns: A list of :class: `KVDUtil_HnrEnkelElement`
+    :returns: A list of :class: `EnkelElement`
     '''
     def merge(self, input, spring=''):
         reeksen = self.stringToNummers(input, spring)
         nummers = self.splitten(reeksen)
         nummers = self.flatten(nummers)
-        result = self.speedmerger.group(nummers)
-        for x in self.flatten(result):
-            print x
         return self.flatten(result)
 
     '''
     :param input: A nested list.
-    :results: A list containing :class: `KVDUtil_HnrElement`.
+    :results: A list containing :class: `Element`.
     '''
     def flatten(self, input):
         r = []
