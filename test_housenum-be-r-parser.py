@@ -16,9 +16,6 @@ from housenum_be_r_parser import(
     KVDUtil_HnrBisletterReeks,
     KVDUtil_HnrBusnummerReeks,
     KVDUtil_HnrBusletterReeks,
-    KVDutil_SequenceReader,
-    KVDutil_HnrReader,
-    KVDutil_HnrSpeedSplitter,
     KVDutil_HuisnummerFacade
 )
 
@@ -237,7 +234,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
 
     def test_merge_units(self):
         label = '32-36, 25-31, 1A-F, 2/1-10, 4 bus 1-30\
-            , 43, 44 bus 1, 45/1, 46A'
+, 43, 44 bus 1, 45/1, 46A'
         huisnummers = self.facade.merge(label)
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(9, len(huisnummers))
@@ -252,8 +249,8 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('44 bus 1', str(huisnummers[8]))
 
     def test_merge_huisnummer_reeksen(self):
-        label = '32, 34, 36, 38, 25,27,29,31, 39\
-            , 40, 41, 42, 43, 44, 46, 47, 48, 49, 50'
+        label = '32, 34, 36, 38, 25, 27, 29, 31, 39\
+, 40, 41, 42, 43, 44, 46, 47, 48, 49, 50'
         huisnummers = self.facade.merge(label)
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(4, len(huisnummers))
@@ -263,7 +260,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('47-49', str(huisnummers[3]))
 
     def test_merge_combinatie_huisnummer_bereiken(self):
-        label = '25-31,18-26'
+        label = '25-31, 18-26'
         huisnummers = self.facade.merge(label)
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(2, len(huisnummers))
@@ -272,3 +269,18 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
 
     def test_merge_bisnummer_bereiken(self):
         label = '10/1-3, 10/4, 15/3-7, 15/8-10'
+        huisnummers = self.facade.merge(label)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(2, len(huisnummers))
+        self.assertEqual('10/1-4', str(huisnummers[0]))
+        self.assertEqual('15/3-10', str(huisnummers[1]))
+
+    def test_split_huisnummers_with_spring_false(self):
+        label = '10-12'
+        spring = False
+        huisnummers = self.facade.split(label, spring)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(3, len(huisnummers))
+        self.assertEqual('10', str(huisnummers[0]))
+        self.assertEqual('11', str(huisnummers[1]))
+        self.assertEqual('12', str(huisnummers[2]))
