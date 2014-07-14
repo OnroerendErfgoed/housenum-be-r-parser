@@ -1,28 +1,23 @@
 import unittest
 
 from housenum_be_r_parser import(
-    KVDUtil_HnrElement,
-    KVDUtil_HnrReadException,
-    KVDUtil_HnrEnkelElement,
-    KVDUtil_HnrHuisnummer,
-    KVDUtil_HnrBiselement,
-    KVDUtil_HnrBisnummer,
-    KVDUtil_HnrBusnummer,
-    KVDUtil_HnrBusletter,
-    KVDUtil_HnrBisletter,
-    KVDUtil_HnrReeksElement,
-    KVDUtil_HnrHuisnummerReeks,
-    KVDUtil_HnrBisnummerReeks,
-    KVDUtil_HnrBisletterReeks,
-    KVDUtil_HnrBusnummerReeks,
-    KVDUtil_HnrBusletterReeks,
-    KVDutil_HuisnummerFacade
+    Huisnummer,
+    Bisnummer,
+    Busnummer,
+    Busletter,
+    Bisletter,
+    HuisnummerReeks,
+    BisnummerReeks,
+    BisletterReeks,
+    BusnummerReeks,
+    BusletterReeks,
+    HuisnummerFacade
 )
 
 
-class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
+class HuisnummerFacadeTests(unittest.TestCase):
     def setUp(self):
-        self.facade = KVDutil_HuisnummerFacade()
+        self.facade = HuisnummerFacade()
 
     def tearDown(self):
         self.facade = None
@@ -33,7 +28,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(1, len(huisnummers))
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrHuisnummer)
+        self.assertIsInstance(hnr, Huisnummer)
         self.assertEqual(str(hnr), '25')
 
     def test_split_nummer_met_letter_bisnummer(self):
@@ -42,7 +37,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 1)
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrBisletter)
+        self.assertIsInstance(hnr, Bisletter)
         self.assertEqual(str(hnr), '25A')
 
     def test_split_nummer_met_cijfer_bisnummer(self):
@@ -51,7 +46,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 1)
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrBisnummer)
+        self.assertIsInstance(hnr, Bisnummer)
         self.assertEqual(str(hnr), '25/1')
 
     def test_split_huisnummer_met_bisnummer_gescheiden_door_underscore(self):
@@ -60,7 +55,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 1)
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrBisnummer)
+        self.assertIsInstance(hnr, Bisnummer)
         self.assertEqual(str(hnr), '111/1')
 
     def test_split_nummer_met_busnummer(self):
@@ -69,7 +64,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 1)
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrBusnummer)
+        self.assertIsInstance(hnr, Busnummer)
         self.assertEqual(str(hnr), '25 bus 3')
 
     def test_split_nummer_met_busletter(self):
@@ -78,7 +73,7 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 1)
         hnr = huisnummers[0]
-        self.assertIsInstance(hnr, KVDUtil_HnrBusletter)
+        self.assertIsInstance(hnr, Busletter)
         self.assertEqual(str(hnr), '25 bus A')
 
     def test_huisnummer_reeks(self):
