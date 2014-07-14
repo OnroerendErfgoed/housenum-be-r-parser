@@ -701,6 +701,7 @@ class HuisnummerFacade():
         reeksen = self.stringToNummers(input, spring)
         nummers = self.splitten(reeksen)
         nummers = self.flatten(nummers)
+        result = self.merger.group(nummers)
         return self.flatten(result)
 
     '''
