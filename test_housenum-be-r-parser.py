@@ -245,8 +245,8 @@ class KVDutil_HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('45/1', str(huisnummers[4]))
         self.assertEqual('1A-F', str(huisnummers[5]))
         self.assertEqual('46A', str(huisnummers[6]))
-        self.assertEqual('4 bus 1-30', str(huisnummers[7]))
-        self.assertEqual('44 bus 1', str(huisnummers[8]))
+        self.assertEqual('44 bus 1', str(huisnummers[7]))
+        self.assertEqual('4 bus 1-30', str(huisnummers[8]))
 
     def test_merge_huisnummer_reeksen(self):
         label = '32, 34, 36, 38, 25, 27, 29, 31, 39\

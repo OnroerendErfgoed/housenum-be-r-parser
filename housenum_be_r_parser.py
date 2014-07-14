@@ -53,9 +53,11 @@ class KVDUtil_HnrReadException(KVDUtil_HnrElement):
         self.input = input
         KVDUtil_HnrElement.__init__(self, -1)
 
+    def isException(self):
+        return True
 
     def split(self):
-        return list(self)
+        return self
 
     def __str__(self):
         return self.input
@@ -143,7 +145,7 @@ class KVDUtil_HnrBusletter(KVDUtil_HnrBiselement):
         KVDUtil_HnrBiselement.__init__(self, huis, -1, -1, -1, bus)
 
     def __str__(self):
-        return self.getHuisnummer() + " bus " + self.getBiselement()
+        return str(self.getHuisnummer()) + " bus " + self.getBiselement()
 
 '''
 A housenumber with bisletter. eg: "3A" of "53D"
@@ -157,7 +159,7 @@ class KVDUtil_HnrBisletter(KVDUtil_HnrBiselement):
         KVDUtil_HnrBiselement.__init__(self, huis, -1, bis)
 
     def __str__(self):
-        return self.getHuisnummer() + self.getBiselement()
+        return str(self.getHuisnummer()) + self.getBiselement()
 
 
 '''
@@ -285,7 +287,7 @@ class KVDUtil_HnrBisletterReeks(KVDUtil_HnrReeksElement):
             self, huis, -1, begin, -1, -1, huis, -1, einde)
 
     def __str__(self):
-        return self.getHuisnummer() + self.getBegin() + "-" + self.getEinde()
+        return str(self.getHuisnummer()) + self.getBegin() + "-" + self.getEinde()
 
     '''
     :param match: A list of :class: `KVDUtil_HnrBisletterReeks`
@@ -415,10 +417,7 @@ class KVDutil_HnrReader():
         for input in inputs:
             input = input.strip()
             element = self.readNummer(input, spring)
-            if element.isException():
-                self.handleException(element, result, flag)
-            else:
-                result.append(element)
+            result.append(element)
         return result
 
     '''
@@ -470,26 +469,14 @@ class KVDutil_HnrReader():
         elif input.isdigit():
             return KVDUtil_HnrHuisnummer(input)
         else:
-            if len(input) == 1:
-                return KVDUtil_HnrBisletter('', input)
+            letter = input[-1:]
+            huis = input[:-1]
+            if (type(letter) == str) and huis.isdigit():
+                return KVDUtil_HnrBisletter(huis, letter)
             else:
-                letter = input[-1:]
-                input = input[:-1]
-                if (type(letter) == str) and input.isdigit():
-                    return KVDUtil_HnrBisletter(input, letter)
-                else:
-                    return KVDUtil_HnrReadException(
-                        "Could not parse/understand",
-                        input)
-
-    def handleException(self, exception, results=list(), flag=1):
-        '''
-        switch($flag) {
-            case (KVDutil_HnrReader::ERR_EXCEPTIONS): throw new Exception($exception->getMessage()); break;
-            case (KVDutil_HnrReader::ERR_IGNORE_INVALID_INPUT): $results[] = $exception; return $results; break;
-            case (KVDutil_HnrReader::ERR_REMOVE_INVALID_INPUT): return $results; break;
-            default: throw new Exception("Invalid flag for KVDutil_HnrReader. Given ".$flag);
-        '''
+                return KVDUtil_HnrReadException(
+                    "Could not parse/understand",
+                    input)
 
 
 '''
@@ -605,9 +592,7 @@ class KVDutil_HnrSpeedMerger():
             if begin != einde:
                 result.append(self.getReeks(x)(y, begin, einde))
             else:
-                z.append(x.__class__(y, r[y][0]))
-        for x in z:
-            result.append(x)
+                result.append(x.__class__(y, r[y][0]))
         return result
 
     '''
@@ -624,13 +609,14 @@ class KVDutil_HnrSpeedMerger():
         result = []
         z = []
         for x in input:
-            huis = x.getHuisnummer()
+            huis = int(x.getHuisnummer())
             bus = x.getBiselement()
             if huis not in r:
                 r[huis] = [bus]
             else:
                 r[huis].append(bus)
         z = []
+        print r
         for y in r:
             begin = r[y][0]
             einde = r[y][0]
@@ -639,9 +625,7 @@ class KVDutil_HnrSpeedMerger():
             if begin != einde:
                 result.append(self.getReeks(x)(y, begin, einde))
             else:
-                z.append(x.__class__(y, begin))
-        for x in z:
-            result.append(x)
+                result.append(x.__class__(y, begin))
         return result
 
     '''
