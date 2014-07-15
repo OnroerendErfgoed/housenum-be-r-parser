@@ -11,8 +11,10 @@ README = open(os.path.join(here, 'README.rst')).read()
 
 
 requires = [
-    'nose',
-    'coverage',
+    'py',
+    'pytest',
+    'pytest-cov',
+    'pep8'
 ]
 
 setup(
