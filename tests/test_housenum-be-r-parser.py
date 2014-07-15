@@ -31,6 +31,15 @@ class HuisnummerFacadeTests(unittest.TestCase):
         hnr = huisnummers[0]
         self.assertIsInstance(hnr, Huisnummer)
         self.assertEqual(str(hnr), '25')
+    
+    def test_list_een_nummer(self):
+        label = ['25']
+        huisnummers = self.facade.split(label)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(1, len(huisnummers))
+        hnr = huisnummers[0]
+        self.assertIsInstance(hnr, Huisnummer)
+        self.assertEqual(str(hnr), '25')
 
     def test_split_nummer_met_letter_bisnummer(self):
         label = '25A'
@@ -79,6 +88,26 @@ class HuisnummerFacadeTests(unittest.TestCase):
 
     def test_huisnummer_reeks(self):
         label = '25,27,29,31'
+        huisnummers = self.facade.split(label)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(len(huisnummers), 4)
+        self.assertEqual(str(huisnummers[0]), '25')
+        self.assertEqual(str(huisnummers[1]), '27')
+        self.assertEqual(str(huisnummers[2]), '29')
+        self.assertEqual(str(huisnummers[3]), '31')
+
+    def test_list_huisnummer_reeks_een(self):
+        label = ['25,27,29,31']
+        huisnummers = self.facade.split(label)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(len(huisnummers), 4)
+        self.assertEqual(str(huisnummers[0]), '25')
+        self.assertEqual(str(huisnummers[1]), '27')
+        self.assertEqual(str(huisnummers[2]), '29')
+        self.assertEqual(str(huisnummers[3]), '31')
+        
+    def test_list_huisnummer_reeks_twee(self):
+        label = ['25','27','29','31']
         huisnummers = self.facade.split(label)
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(len(huisnummers), 4)
@@ -274,6 +303,14 @@ class HuisnummerFacadeTests(unittest.TestCase):
 
     def test_merge_combinatie_huisnummer_bereiken(self):
         label = '25-31, 18-26'
+        huisnummers = self.facade.merge(label)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(2, len(huisnummers))
+        self.assertEqual('18-26', str(huisnummers[0]))
+        self.assertEqual('25-31', str(huisnummers[1]))
+        
+    def test_merge_list_combinatie_huisnummer_bereiken(self):
+        label = ['25-31', '18-26']
         huisnummers = self.facade.merge(label)
         self.assertIsInstance(huisnummers, list)
         self.assertEqual(2, len(huisnummers))
