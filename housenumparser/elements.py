@@ -68,9 +68,6 @@ An abstract superclass for housenumbers.
 
 class EnkelElement(Element):
 
-    def isException(self):
-        return False
-
     def split(self):
         return self
 
