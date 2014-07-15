@@ -15,6 +15,7 @@ from housenum_be_r_parser.elements import(
 
 from housenum_be_r_parser import HuisnummerFacade
 
+
 class HuisnummerFacadeTests(unittest.TestCase):
     def setUp(self):
         self.facade = HuisnummerFacade()
@@ -215,7 +216,7 @@ class HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('A', str(huisnummers[0]))
         self.assertEqual('1/3', str(huisnummers[1]))
         self.assertEqual('?', str(huisnummers[2]))
-        
+
     def test_bogus_input_flag_2(self):
         label = 'A,1/3,?'
         flag = 2
@@ -225,7 +226,7 @@ class HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('Could not parse/understand', str(huisnummers[0]))
         self.assertEqual('1/3', str(huisnummers[1]))
         self.assertEqual('Could not parse/understand', str(huisnummers[2]))
-        
+
     def test_bogus_input_flag_3(self):
         label = 'A,1/3,?'
         flag = 3

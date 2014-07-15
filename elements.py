@@ -29,7 +29,6 @@ class Element():
                 h2, bisn2, bisl2, busn2, busl2
             ]
 
-
     '''
     :param i: Integer index of the required data
     :returns: Integer or String
@@ -48,14 +47,14 @@ class ReadException(Element):
     def __init__(self, error, input="", flag=1):
         self.error = error
         self.input = input
-        self.flag=flag
+        self.flag = flag
         Element.__init__(self, -1)
 
     def isException(self):
         return True
 
     def split(self):
-        if self.flag in [1,2]:
+        if self.flag in [1, 2]:
             return self
 
     def __str__(self):
@@ -176,7 +175,7 @@ class ReeksElement(EnkelElement):
 
     def getEinde(self):
         return self.getData(self.eindeIndex)
-        
+
     def jump(self):
         if self.spring == '':
             if (int(self.getBegin()) - int(self.getEinde())) % 2 == 0:
@@ -259,7 +258,7 @@ class BisnummerReeks(ReeksElement):
     '''
     def split(self):
         begin = self.getBegin()
-        einde =self.getEinde()
+        einde = self.getEinde()
         huis = self.getHuisnummer()
         jump = 1
         res = []
@@ -289,7 +288,8 @@ class BisletterReeks(ReeksElement):
             self, huis, -1, begin, -1, -1, huis, -1, einde)
 
     def __str__(self):
-        return str(self.getHuisnummer()) + self.getBegin() + "-" + self.getEinde()
+        return str(self.getHuisnummer()) + self.getBegin() + "-"\
+            + self.getEinde()
 
     '''
     :param match: A list of :class: `BisletterReeks`
@@ -330,14 +330,14 @@ class BusnummerReeks(ReeksElement):
     def __str__(self):
         return str(self.getHuisnummer()) + " bus " +\
             str(self.getBegin()) + "-" + str(self.getEinde())
-            
+
     '''
     :param match: A list of :class: `BusnummerReeks`
     :returns: A list of :class: `Busnummer`
     '''
     def split(self):
         begin = self.getBegin()
-        einde =self.getEinde()
+        einde = self.getEinde()
         huis = self.getHuisnummer()
         jump = 1
         res = []

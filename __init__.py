@@ -3,8 +3,8 @@ import re
 from reader import Reader
 from merger import Merger
 '''
-This class is used to split housenumberlabels into individual labels 
-or to join individual labels into a more compact representation. 
+This class is used to split housenumberlabels into individual labels
+or to join individual labels into a more compact representation.
 eg:
 <code>
     facade = new KVDutil_HuisnummerFacade( );
@@ -73,9 +73,9 @@ class HuisnummerFacade():
         for x in input:
             if x .__class__ == list and x != []:
                 for y in x:
-                    if y != None:
+                    if y is not None:
                         r.append(y)
             else:
-                if x != [] and x != None:
+                if x != [] and x is not None:
                     r.append(x)
         return r

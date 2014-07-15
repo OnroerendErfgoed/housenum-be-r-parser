@@ -72,7 +72,7 @@ class Merger():
                     if begin != einde:
                         r.append(HuisnummerReeks(begin, einde))
                         input.remove(einde)
-                    elif y == 1 :
+                    elif y == 1:
                         rest.append(einde)
                         input.remove(einde)
                     z = loop(input, rest, r)
