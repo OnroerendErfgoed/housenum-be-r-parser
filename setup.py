@@ -10,7 +10,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 
 packages = [
-    'housenum-be-r-parser',
+    'housenum_be_r_parser',
 ]
 
 requires = [
@@ -19,7 +19,7 @@ requires = [
 ]
 
 setup(
-    name='housenum-be-r-parser',
+    name='housenum_be_r_parser',
     version='',
     description='',
     long_description=README,
@@ -28,7 +28,7 @@ setup(
     url='http://github.com/onroerenderfgoed/housenum-be-r-parser',
     packages=find_packages(),
     package_data={'': ['LICENSE']},
-    package_dir={'housenum-be-r-parser': 'housenum-be-r-parser'},
+    package_dir={'housenum_be_r_parser': 'housenum_be_r_parser'},
     include_package_data=True,
     install_requires=requires,
     license='MIT',
