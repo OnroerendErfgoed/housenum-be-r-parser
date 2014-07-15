@@ -1,7 +1,7 @@
 import abc
 import re
-from reader import Reader
-from merger import Merger
+from housenumparser.reader import Reader
+from housenumparser.merger import Merger
 '''
 This class is used to split housenumberlabels into individual labels
 or to join individual labels into a more compact representation.

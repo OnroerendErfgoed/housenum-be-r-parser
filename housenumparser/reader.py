@@ -1,4 +1,4 @@
-from elements import (
+from housenumparser.elements import (
     Huisnummer,
     Bisnummer,
     Busnummer,
