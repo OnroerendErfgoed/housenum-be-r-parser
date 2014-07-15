@@ -334,3 +334,12 @@ class HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('10', str(huisnummers[0]))
         self.assertEqual('11', str(huisnummers[1]))
         self.assertEqual('12', str(huisnummers[2]))
+        
+    def test_split_huisnummers_with_spring_true(self):
+        label = '10-12'
+        spring = True
+        huisnummers = self.facade.split(label, spring)
+        self.assertIsInstance(huisnummers, list)
+        self.assertEqual(2, len(huisnummers))
+        self.assertEqual('10', str(huisnummers[0]))
+        self.assertEqual('12', str(huisnummers[1]))
