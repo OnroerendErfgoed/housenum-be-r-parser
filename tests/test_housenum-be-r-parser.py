@@ -1,6 +1,6 @@
 import unittest
 
-from housenum_be_r_parser.elements import(
+from housenumparser.elements import(
     Huisnummer,
     Bisnummer,
     Busnummer,
@@ -13,7 +13,7 @@ from housenum_be_r_parser.elements import(
     BusletterReeks
 )
 
-from housenum_be_r_parser import HuisnummerFacade
+from housenumparser import HuisnummerFacade
 
 
 class HuisnummerFacadeTests(unittest.TestCase):

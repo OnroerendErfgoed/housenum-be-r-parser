@@ -9,9 +9,6 @@ from setuptools import setup, find_packages
 here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.rst')).read()
 
-packages = [
-    'housenum_be_r_parser',
-]
 
 requires = [
     'nose',
@@ -19,16 +16,16 @@ requires = [
 ]
 
 setup(
-    name='housenum_be_r_parser',
-    version='',
-    description='',
+    name='housenumparser',
+    version='0.1',
+    description='housenum_be_r_parser',
     long_description=README,
     author='Onroerend Erfgoed',
     author_email='ict@onroerenderfgoed.be',
     url='http://github.com/onroerenderfgoed/housenum-be-r-parser',
     packages=find_packages(),
     package_data={'': ['LICENSE']},
-    package_dir={'housenum_be_r_parser': 'housenum_be_r_parser'},
+    package_dir={'housenumparser': 'housenumparser'},
     include_package_data=True,
     install_requires=requires,
     license='MIT',
