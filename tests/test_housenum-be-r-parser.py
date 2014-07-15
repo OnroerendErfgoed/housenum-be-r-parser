@@ -276,10 +276,10 @@ class HuisnummerFacadeTests(unittest.TestCase):
 
     def test_merge_units(self):
         label = '32-36, 25-31, 1A-F, 2/1-10, 4 bus 1-30\
-, 43, 44 bus 1, 45/1, 46A'
+, 43, 44 bus 1, 45/1, 46A, 33 bus A-C'
         huisnummers = self.facade.merge(label)
         self.assertIsInstance(huisnummers, list)
-        self.assertEqual(9, len(huisnummers))
+        self.assertEqual(10, len(huisnummers))
         self.assertEqual('25-31', str(huisnummers[0]))
         self.assertEqual('32-36', str(huisnummers[1]))
         self.assertEqual('43', str(huisnummers[2]))
@@ -289,6 +289,7 @@ class HuisnummerFacadeTests(unittest.TestCase):
         self.assertEqual('46A', str(huisnummers[6]))
         self.assertEqual('44 bus 1', str(huisnummers[7]))
         self.assertEqual('4 bus 1-30', str(huisnummers[8]))
+        self.assertEqual('33 bus A-C', str(huisnummers[9]))
 
     def test_merge_huisnummer_reeksen(self):
         label = '32, 34, 36, 38, 25, 27, 29, 31, 39\
