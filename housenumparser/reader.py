@@ -25,6 +25,8 @@ class Reader():
     :returns: A list from of the input.
     '''
     def readString(self, input, spring, flag):
+        if input.__class__ == list:
+            input = ', '.join(input)
         return self.readArray(str(input).split(","), spring, flag)
 
     '''
