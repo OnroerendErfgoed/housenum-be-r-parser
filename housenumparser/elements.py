@@ -362,7 +362,7 @@ class BusletterReeks(ReeksElement):
             self, huis, -1, -1, -1, begin, huis, -1, -1, -1, einde)
 
     def __str__(self):
-        return str(self.getHuisnummer()) + " bus "
+        return str(self.getHuisnummer()) + " bus "\
         + str(self.getBegin()) + "-" + str(self.getEinde())
 
     '''
