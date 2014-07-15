@@ -50,9 +50,6 @@ class ReadException(Element):
         self.flag = flag
         Element.__init__(self, -1)
 
-    def isException(self):
-        return True
-
     def split(self):
         if self.flag in [1, 2]:
             return self
