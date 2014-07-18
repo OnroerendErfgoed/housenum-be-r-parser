@@ -12,6 +12,7 @@ Contents:
    :maxdepth: 2
     
    api
+   business_rules
 
 
 Indices and tables
