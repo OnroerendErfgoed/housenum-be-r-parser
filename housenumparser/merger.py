@@ -40,13 +40,13 @@ class Merger():
                 result['busletter'].append(x)
         return self.mergeNummers(result)
 
-    '''
-    :param inputs: A dictionary containing seperated lists of
-        :class: `EnkelElement`.
-    :returns list: A list of :class: `EnkelElement`
-        and if possible :class: `ReeksElement`.
-    '''
     def mergeNummers(self, input):
+        '''
+        :param inputs: A dictionary containing seperated lists of
+            :class: `EnkelElement`.
+        :returns: A list of :class: `EnkelElement`
+            and if possible :class: `ReeksElement`.
+        '''
         r = []
         r.append(self.mergeHuisnummers(input['huisnummer']))
         r.append(self.mergeN(input['bisnummer']))
@@ -55,12 +55,12 @@ class Merger():
         r.append(self.mergeL(input['busletter']))
         return r
 
-    '''
-    :param input: List of integers.
-    :returns: List of :class: `HuisnummerReeks`(if possible)
-        and :class: `Huisnummer`.
-    '''
     def mergeHuisnummers(self, input):
+        '''
+        :param input: List of integers.
+        :returns: List of :class: `HuisnummerReeks`(if possible)
+            and :class: `Huisnummer`.
+        '''
         def loop(input, rest, r):
             for y in [2, 1]:
                 while len(input) > 1:
@@ -94,16 +94,16 @@ class Merger():
             r.append(Huisnummer(x))
         return r
 
-    '''
-    :param input: List of :class: `Bisnummer`.
-    :returns: List of :class: `BisnummerReeks`(if possible)
-        and :class: `Bisnummer`.
-        OR
-    :param input: List of :class: `Busnummer`.
-    :returns: List of :class: `BusnummerReeks`(if possible)
-        and :class: `Busnummer`.
-    '''
     def mergeN(self, input):
+        '''
+        :param input: List of :class: `Bisnummer`.
+        :returns: List of :class: `BisnummerReeks`(if possible)
+            and :class: `Bisnummer`.
+        :OR:
+        :param input: List of :class: `Busnummer`.
+        :returns: List of :class: `BusnummerReeks`(if possible)
+            and :class: `Busnummer`.
+        '''
         r = {}
         result = []
         z = []
@@ -126,16 +126,16 @@ class Merger():
                 result.append(x.__class__(y, r[y][0]))
         return result
 
-    '''
-    :param input: List of :class: `Bisletter`.
-    :returns: List of :class: `BisletterReeks`(if possible)
-        and :class: `Bisletter`.
-        OR
-    :param input: List of :class: `Busnummer`.
-    :returns: List of :class: `BusletterReeks`(if possible)
-        and :class: `Busletter`.
-    '''
     def mergeL(self, input):
+        '''
+        :param input: List of :class: `Bisletter`.
+        :returns: List of :class: `BisletterReeks`(if possible)
+            and :class: `Bisletter`.
+        :OR:
+        :param input: List of :class: `Busnummer`.
+        :returns: List of :class: `BusletterReeks`(if possible)
+            and :class: `Busletter`.
+        '''
         r = {}
         result = []
         z = []
@@ -158,11 +158,11 @@ class Merger():
                 result.append(x.__class__(y, begin))
         return result
 
-    '''
-    :param input: A :class: `EnkelElement`
-    :results: Matching housenumber series class
-    '''
     def getReeks(self, input):
+        '''
+        :param input: A :class: `EnkelElement`
+        :results: Matching housenumber series class
+        '''
         if input.__class__ == Bisnummer:
             return BisnummerReeks
         if input.__class__ == Busnummer:

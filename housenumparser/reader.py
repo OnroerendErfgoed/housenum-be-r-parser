@@ -29,25 +29,25 @@ class Reader():
             input = ', '.join(input)
         return self.readArray(str(input).split(","), spring, flag)
 
-    '''
-    :param inputs: A String containing representations of housenumberobjects
-        and/or housenumber series objects.
-    :returns: A list of :class: `EnkelElement` and/or
-        :class: `ReeksElement`.
-    '''
     def readArray(self, inputs, spring, flag):
+        '''
+        :param inputs: A String containing representations of housenumberobjects
+            and/or housenumber series objects.
+        :returns: A list of :class: `EnkelElement` and/or
+            :class: `ReeksElement`.
+        '''
         result = list()
         for input in inputs:
             input = input.strip()
             result.append(self.readNummer(input, spring, flag))
         return result
 
-    '''
-    :param input: A list of housenumber representations.
-    :returns: A :class: `Element` OR
-        an exception in case of incorrect input.
-    '''
     def readNummer(self, input, spring, flag):
+        '''
+        :param input: A list of housenumber representations.
+        :returns: A :class: `Element` OR
+            an exception in case of incorrect input.
+        '''
         if '-' in input:
             if 'bus' in input:
                 input = input.split()

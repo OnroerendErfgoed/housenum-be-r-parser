@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 
 '''
 A housenumber element.
 This is an abstract superclass for all output of the housenumberreader.
 This can be a housenumber, a housenumber series, readingerror, etc.
 '''
-
 
 class Element():
 
@@ -18,7 +18,7 @@ class Element():
     :param bisn2: String last bisnummer of the series.
     :param bisl2: String last bisletter of the series.
     :param busn2: String last busnummer of the series.
-    :params busl2: String last busletter of the series.
+    :param busl2: String last busletter of the series.
     '''
     def __init__(
         self, h1, bisn1=-1, bisl1=-1, busn1=-1, busl1=-1,
@@ -29,11 +29,11 @@ class Element():
                 h2, bisn2, bisl2, busn2, busl2
             ]
 
-    '''
-    :param i: Integer index of the required data
-    :returns: Integer or String
-    '''
     def getData(self, i):
+        '''
+        :param i: Integer index of the required data
+        :returns: Integer or String
+        '''
         return self.data[i]
 
 
@@ -71,10 +71,10 @@ class EnkelElement(Element):
     def split(self):
         return self
 
-    '''
-     :returns: The housenumber attribute of the object.
-    '''
     def getHuisnummer(self):
+        '''
+        :returns: The housenumber attribute of the object.
+        '''
         return self.getData(0)
 
 '''
@@ -207,11 +207,11 @@ class HuisnummerReeks(ReeksElement):
     def __str__(self):
             return str(self.getBegin()) + "-" + str(self.getEinde())
 
-    '''
-     :param match: A list of :class: `HuisnummerReeks`
-     :returns: A list of :class: `Huisnummer`
-    '''
     def split(self):
+        '''
+         :param match: A list of :class: `HuisnummerReeks`
+         :returns: A list of :class: `Huisnummer`
+        '''
         begin = self.getBegin()
         einde = self.getEinde()
         jump = self.jump()
@@ -246,11 +246,11 @@ class BisnummerReeks(ReeksElement):
         return str(self.getHuisnummer()) + "/" +\
             str(self.getBegin()) + "-" + str(self.getEinde())
 
-    '''
-    :param match: A list of :class: `BisnummerReeks`
-    :returns: A list of :class: `Bisnummer`
-    '''
     def split(self):
+        '''
+        :param match: A list of :class: `BisnummerReeks`
+        :returns: A list of :class: `Bisnummer`
+        '''
         begin = self.getBegin()
         einde = self.getEinde()
         huis = self.getHuisnummer()
@@ -285,11 +285,11 @@ class BisletterReeks(ReeksElement):
         return str(self.getHuisnummer()) + self.getBegin() + "-"\
             + self.getEinde()
 
-    '''
-    :param match: A list of :class: `BisletterReeks`
-    :returns: A list of :class: `Bisletter`
-    '''
     def split(self):
+        '''
+        :param match: A list of :class: `BisletterReeks`
+        :returns: A list of :class: `Bisletter`
+        '''
         begin = ord(self.getBegin())
         einde = ord(self.getEinde())
         huis = self.getHuisnummer()
@@ -325,11 +325,11 @@ class BusnummerReeks(ReeksElement):
         return str(self.getHuisnummer()) + " bus " +\
             str(self.getBegin()) + "-" + str(self.getEinde())
 
-    '''
-    :param match: A list of :class: `BusnummerReeks`
-    :returns: A list of :class: `Busnummer`
-    '''
     def split(self):
+        '''
+        :param match: A list of :class: `BusnummerReeks`
+        :returns: A list of :class: `Busnummer`
+        '''
         begin = self.getBegin()
         einde = self.getEinde()
         huis = self.getHuisnummer()
@@ -365,11 +365,11 @@ class BusletterReeks(ReeksElement):
         return str(self.getHuisnummer()) + " bus "\
         + str(self.getBegin()) + "-" + str(self.getEinde())
 
-    '''
-    :param match: A list of :class: `BisletterReeks`
-    :returns: A list of :class: `Bisletter`
-    '''
     def split(self):
+        '''
+        :param match: A list of :class: `BisletterReeks`
+        :returns: A list of :class: `Bisletter`
+        '''
         begin = ord(self.getBegin())
         einde = ord(self.getEinde())
         huis = self.getHuisnummer()
