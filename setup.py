@@ -11,10 +11,6 @@ README = open(os.path.join(here, 'README.rst')).read()
 
 
 requires = [
-    'py',
-    'pytest',
-    'pytest-cov',
-    'pep8'
 ]
 
 setup(

@@ -1,5 +1,1 @@
-pyramid==1.5
-requests==2.2.1
-requests_oauthlib==0.4.0
-six==1.6.1
-dogpile.cache==0.5.4
+
