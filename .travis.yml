@@ -6,7 +6,7 @@ python:
 install:
  - pip install -U setuptools
  - python setup.py develop
- - pip install -r requirements
+ - pip install -r requirements.txt
  - pip install -U pytest-cov coveralls
 script:
     py.test --cov housenumparser --cov-report term-missing tests
