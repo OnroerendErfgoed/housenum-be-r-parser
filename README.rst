@@ -1,7 +1,7 @@
 Housenum-be-r-parser
 =====================
 
-A small library for merging and splitting sequences of Belgian housenumbers.
+A small library for merging and splitting sequences of Belgian house numbers.
     
 .. image:: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser.png?branch=master
         :target: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser

@@ -1,81 +1,39 @@
-import abc
-import re
-from housenumparser.reader import Reader
-from housenumparser.merger import Merger
-'''
-This class is used to split housenumberlabels into individual labels
-or to join individual labels into a more compact representation.
-eg:
-<code>
-    facade = new KVDutil_HuisnummerFacade( );
-    huisnummers = facade.split( '15-21' );
-    print huisnummers[0]; // 15
-    print huisnummers[1]; // 17
-    print huisnummers[2]; // 19
-    print huisnummers[3]; // 21
-    reeksen = facade.merge(huisnummers);
-    print reeksen[0]; // 15-21
-</code>
-'''
+# -*- coding: utf-8 -*-
+from housenumparser import merger
+from housenumparser import reader
+from housenumparser.elements import BadInput
 
 
-class HuisnummerFacade():
-    def __init__(self):
-        self.reader = Reader()
-        self.merger = Merger()
+def split(data, step=None, on_exc=BadInput.IGNORE):
+    """
+    Parses a string of house number series and returns single numbers.
+    :param data: String or list of strings of house number and/or house
+                 number series representations
+    :param step: Amount of house numbers per step. Commonly 1 or 2.
+                 Default None.
+                 When `None`, it will use 2 if beginning and ending of a
+                 series are both even or uneven, 1 otherwise.
+    :param on_exc: `housenumparser.elements.BadInput`. Flag on how to
+                   treat incorrect data. Default BadInput.IGNORE
+    :returns: A list of :class: `SingleElement`
+    """
+    if isinstance(data, list):
+        numbers = reader.read_iterable(data, step=step, on_exc=on_exc)
+    else:
+        numbers = reader.read_data(data, step=step, on_exc=on_exc)
+    return [item for number in numbers for item in number.split()]
 
-    '''
-    :param input: string of housenumber and/or
-        housenumber series representations
-    :returns: A list of :class: `EnkelElement`
-    '''
-    def split(self, input, spring='', flag=1):
-        nummers = self.stringToNummers(input, spring, flag)
-        reeks = self.splitten(nummers)
-        return self.flatten(reeks)
 
-    '''
-    :param input: string of housenumber and/or
-        housenumber series representations.
-    :returns: A list of housenumber and/or housenumber series representations.
-    '''
-    def stringToNummers(self, input, spring, flag):
-        return self.reader.readString(input, spring, flag)
-
-    '''
-    :param input: A list of :class: `ReeksElement`.
-    :returns: A list of :class: `EnkelElement`.
-    '''
-    def splitten(self, input):
-        r = []
-        for i in input:
-            r.append(i.split())
-        return r
-
-    '''
-    :param input: A list of housenumber and/or
-        housenumber series representations.
-    :returns: A list of :class: `EnkelElement`
-    '''
-    def merge(self, input, spring='', flag=1):
-        reeksen = self.stringToNummers(input, spring, flag)
-        nummers = self.splitten(reeksen)
-        nummers = self.flatten(nummers)
-        result = self.merger.group(nummers)
-        return self.flatten(result)
-
-    '''
-    :param input: A nested list.
-    :results: A list containing :class: `Element`.
-    '''
-    def flatten(self, input):
-        r = []
-        for x in input:
-            if x .__class__ == list and x != []:
-                for y in x:
-                    if y is not None:
-                        r.append(y)
-            else:
-                if x != [] and x is not None:
-                    r.append(x)
-        return r
+def merge(data, on_exc=BadInput.IGNORE):
+    """
+    Parses a string or list of house number series and returns elements merged
+    into sequences if possible.
+    :param data: String or list of strings of house number and/or house
+                 number series representations
+    :param on_exc: `housenumparser.reader.BadInput`. Flag on how to
+                   treat incorrect data.
+                   Default BadInput.IGNORE
+    :returns: A list of :class: `Element`
+    """
+    numbers = split(data, on_exc=on_exc)
+    return merger.merge_data(merger.group(numbers))

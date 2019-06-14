@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import os
-import sys
 
 
 from setuptools import setup, find_packages
@@ -15,7 +14,7 @@ requires = [
 
 setup(
     name='housenumparser',
-    version='0.1',
+    version='0.2',
     description='housenum_be_r_parser',
     long_description=README,
     author='Onroerend Erfgoed',
@@ -36,8 +35,8 @@ setup(
         'Operating System :: OS Independent',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     test_suite='tox'
 )
