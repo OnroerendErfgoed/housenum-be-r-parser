@@ -10,9 +10,8 @@ Contents:
 
 .. toctree::
    :maxdepth: 2
-    
-   api
-   business_rules
+   :caption: Contents:
+
 
 
 Indices and tables
@@ -22,3 +21,5 @@ Indices and tables
 * :ref:`modindex`
 * :ref:`search`
 
+.. automodule:: housenumparser
+   :members:

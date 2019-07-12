@@ -69,7 +69,8 @@ class ReadException(Element):
         if self.on_exc == ReadException.Action.KEEP_ORIGINAL:
             return self.data
         if self.on_exc == ReadException.Action.ERROR_MSG:
-            return '({}): '.format(self.data, self.error)
+            return '{}: {}'.format(self.error, self.data)
+        return '<ReadException> Not implemented on_exc: ' + self.on_exc.name
 
 
 class SequenceElement(Element):

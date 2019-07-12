@@ -94,3 +94,4 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
                     ReadException.Action.KEEP_ORIGINAL):
         return ReadException("Could not parse/understand", data=data,
                              on_exc=on_exc)
+    raise Exception("Not implemented on_exc: " + on_exc.name)

@@ -248,9 +248,9 @@ def test_invalid_input_ignore_errors():
                                          on_exc=ReadException.Action.ERROR_MSG)
     assert isinstance(house_numbers, list)
     assert 3 == len(house_numbers)
-    assert 'Could not parse/understand' == str(house_numbers[0])
+    assert 'Could not parse/understand: A' == str(house_numbers[0])
     assert '1/3' == str(house_numbers[1])
-    assert 'Could not parse/understand' == str(house_numbers[2])
+    assert 'Could not parse/understand: ?' == str(house_numbers[2])
 
 
 def test_bogus_input_drop_errors():

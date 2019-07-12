@@ -1,14 +1,15 @@
 language: python
-python: 
- - 2.7
- - 3.5
- - 3.6
+python:
+  - "2.7"
+  - "3.5"
+  - "3.6"
 install:
- - pip install -U setuptools
- - python setup.py develop
- - pip install -r requirements.txt
- - pip install -U pytest-cov coveralls
+  - pip install -U setuptools
+  - python setup.py develop
+  - pip install -r requirements-dev.txt
+  - pip install -U pytest-cov coveralls
 script:
-    py.test --cov housenumparser --cov-report term-missing tests
+  - flake8
+  - py.test --cov housenumparser --cov-report term-missing tests
 after_success:
-    coveralls
+  coveralls

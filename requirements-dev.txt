@@ -6,7 +6,18 @@ pytest==4.6.3
 pytest-cov==2.7.1
 
 # Linting
-pep8==1.4.6
+flake8==3.7.8  # Default pep8 checker
+flake8-breakpoint==1.1.0; python_version >= '3.6'  # checks for breakpoint / pdb
+flake8-builtins==1.4.1  # checks for overriding builtin names
+flake8-comprehensions==2.1.0; python_version >= '3.5'  # checks for incorrect use of list/set/dict stuff
+flake8-comprehensions==1.4.1; python_version < '3.5'  # checks for incorrect use of list/set/dict stuff
+flake8-logging-format==0.6.0  # checks for string formatting in logging
+flake8-import-order==0.18.1  # checks import order
+flake8-print==3.1.0  # checks for print statements
+flake8-return==1.1.0; python_version >= '3.6'  # checks for proper return usage
+pep8-naming==0.8.2  # checks naming convention
 
-
-
+# Sphinx documentation
+Sphinx==2.1.2; python_version >= '3.5'
+Sphinx==1.8.5; python_version < '3.5'
+oe-sphinx-theme==0.2.0
