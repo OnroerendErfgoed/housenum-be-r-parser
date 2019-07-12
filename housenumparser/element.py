@@ -3,13 +3,6 @@ import re
 from enum import Enum
 
 
-class BadInput(Enum):
-    RAISE = 1  # Raises exception on bad input
-    IGNORE = 2  # A element with str() error message info will be returned
-    KEEP_ORIGINAL = 3  # A element with str() original data will be returned
-    DROP = 4  # The error will be ignored, and not exist in the output.
-
-
 class Element(object):
     """
     A house number element.
@@ -57,7 +50,13 @@ class ReadException(Element):
     Class for a reading error in housenumparser.reader.
     """
 
-    def __init__(self, error, data="", on_exc=BadInput.IGNORE):
+    class Action(Enum):
+        RAISE = 1  # Raises exception on bad input
+        ERROR_MSG = 2  # An error message will return
+        KEEP_ORIGINAL = 3  # The original data will return
+        DROP = 4  # The error will be ignored, and not exist in the output.
+
+    def __init__(self, error, data="", on_exc=Action.ERROR_MSG):
         super(ReadException, self).__init__(None)
         self.error = error
         self.data = data
@@ -67,10 +66,10 @@ class ReadException(Element):
         return [self]
 
     def __str__(self):
-        if self.on_exc == BadInput.KEEP_ORIGINAL:
+        if self.on_exc == ReadException.Action.KEEP_ORIGINAL:
             return self.data
-        if self.on_exc == BadInput.IGNORE:
-            return self.error
+        if self.on_exc == ReadException.Action.ERROR_MSG:
+            return '({}): '.format(self.data, self.error)
 
 
 class SequenceElement(Element):

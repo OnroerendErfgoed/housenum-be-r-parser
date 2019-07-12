@@ -4,16 +4,16 @@ Module which takes a string of house numbers and turns them into series.
 """
 import collections
 
-from housenumparser.elements import BisLetter
-from housenumparser.elements import BisLetterSequence
-from housenumparser.elements import BisNumber
-from housenumparser.elements import BisNumberSequence
-from housenumparser.elements import BusLetter
-from housenumparser.elements import BusLetterSequence
-from housenumparser.elements import BusNumber
-from housenumparser.elements import BusNumberSequence
-from housenumparser.elements import HouseNumber
-from housenumparser.elements import HouseNumberSequence
+from housenumparser.element import BisLetter
+from housenumparser.element import BisLetterSequence
+from housenumparser.element import BisNumber
+from housenumparser.element import BisNumberSequence
+from housenumparser.element import BusLetter
+from housenumparser.element import BusLetterSequence
+from housenumparser.element import BusNumber
+from housenumparser.element import BusNumberSequence
+from housenumparser.element import HouseNumber
+from housenumparser.element import HouseNumberSequence
 
 
 def group(data):

@@ -1,28 +1,27 @@
 # -*- coding: utf-8 -*-
 """
 Module which reads a series of house numbers.
- eg: "23 bus 5, 23 bus 6" -> array (Busnummer "23 bus 5", Busnummer "23
+ eg: "23 bus 5, 23 bus 6" -> array (BusNumber "23 bus 5", BusNumber "23
  B-6")
- eg: "23", "24 bus 2" -> array (Huisnummer "23", Busnummer "24 bus 2")
- eg: "25-27" -> array (Huisnummerreeks "25, 26-27")
+ eg: "23", "24 bus 2" -> array (HouseNumber "23", BusNumber "24 bus 2")
+ eg: "25-27" -> array (HouseNumberSequence "25, 26-27")
 """
 import re
 
-from housenumparser.elements import BadInput
-from housenumparser.elements import BisLetter
-from housenumparser.elements import BisLetterSequence
-from housenumparser.elements import BisNumber
-from housenumparser.elements import BisNumberSequence
-from housenumparser.elements import BusLetter
-from housenumparser.elements import BusLetterSequence
-from housenumparser.elements import BusNumber
-from housenumparser.elements import BusNumberSequence
-from housenumparser.elements import HouseNumber
-from housenumparser.elements import HouseNumberSequence
-from housenumparser.elements import ReadException
+from housenumparser.element import BisLetter
+from housenumparser.element import BisLetterSequence
+from housenumparser.element import BisNumber
+from housenumparser.element import BisNumberSequence
+from housenumparser.element import BusLetter
+from housenumparser.element import BusLetterSequence
+from housenumparser.element import BusNumber
+from housenumparser.element import BusNumberSequence
+from housenumparser.element import HouseNumber
+from housenumparser.element import HouseNumberSequence
+from housenumparser.element import ReadException
 
 
-def read_data(data, step=None, on_exc=BadInput.IGNORE):
+def read_data(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a comma-seperated string of house number elements.
 
@@ -31,30 +30,28 @@ def read_data(data, step=None, on_exc=BadInput.IGNORE):
                  Default None.
                  When `None`, it will use 2 if beginning and ending of a
                  series are both even or uneven, 1 otherwise.
-    :param on_exc: `housenumparser.reader.BadInput`. Flag on how to
-                   treat incorrect data.
-                   Default BadInput.IGNORE
+    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
+                   Default ReadException.Action.IGNORE
     :returns: A list from of the data.
     """
     return read_iterable(str(data).split(","), step=step, on_exc=on_exc)
 
 
-def read_iterable(inputs, step=None, on_exc=BadInput.IGNORE):
+def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses an iterable of house number element strings.
 
-    :param inputs: A `list`` containing strings of house numbers
-        and/or house number series objects.
+    :param inputs: A `list` containing strings of house numbers
+                   and/or house number series objects.
     :param step: Amount of house numbers per step. Commonly 1 or 2.
                  Default None.
                  When `None`, it will use 2 if beginning and ending of a
                  series are both even or uneven, 1 otherwise.
-    :param on_exc: `housenumparser.reader.BadInput`. Flag on how to
-                   treat incorrect data.
-                   Default BadInput.IGNORE
+    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
+                   Default ReadException.Action.IGNORE
     :returns: A list of :class: `Element`.
     """
-    result = list()
+    result = []
     for data in inputs:
         data = data.strip()
         parsed_element = read_element(data, step=step, on_exc=on_exc)
@@ -63,7 +60,7 @@ def read_iterable(inputs, step=None, on_exc=BadInput.IGNORE):
     return result
 
 
-def read_element(data, step=None, on_exc=BadInput.IGNORE):
+def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a single house number element string.
 
@@ -72,9 +69,8 @@ def read_element(data, step=None, on_exc=BadInput.IGNORE):
                  Default None.
                  When `None`, it will use 2 if beginning and ending of a
                  series are both even or uneven, 1 otherwise.
-    :param on_exc: `housenumparser.reader.BadInput`. Flag on how to
-                   treat incorrect data.
-                   Default BadInput.IGNORE
+    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
+                   Default ReadException.Action.IGNORE
     :returns: A :class: `Element` OR an exception in case of incorrect data.
     """
     element_classes = [BusNumberSequence, BusLetterSequence, BisNumberSequence,
@@ -89,12 +85,12 @@ def read_element(data, step=None, on_exc=BadInput.IGNORE):
             kwargs = {}
             if element_class == HouseNumberSequence:
                 kwargs['step'] = step
-            element = element_class(*args, **kwargs)
-            return element
-    if on_exc == BadInput.RAISE:
+            return element_class(*args, **kwargs)
+    if on_exc == ReadException.Action.RAISE:
         raise ValueError("Could not parse/understand input: {}".format(data))
-    elif on_exc == BadInput.DROP:
+    elif on_exc == ReadException.Action.DROP:
         return None
-    elif on_exc in (BadInput.IGNORE, BadInput.KEEP_ORIGINAL):
+    elif on_exc in (ReadException.Action.ERROR_MSG,
+                    ReadException.Action.KEEP_ORIGINAL):
         return ReadException("Could not parse/understand", data=data,
                              on_exc=on_exc)

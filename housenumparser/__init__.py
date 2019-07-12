@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from housenumparser import merger
 from housenumparser import reader
-from housenumparser.elements import BadInput
+from housenumparser.element import ReadException
 
 
-def split(data, step=None, on_exc=BadInput.IGNORE):
+def split(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a string of house number series and returns single numbers.
     :param data: String or list of strings of house number and/or house
@@ -24,7 +24,7 @@ def split(data, step=None, on_exc=BadInput.IGNORE):
     return [item for number in numbers for item in number.split()]
 
 
-def merge(data, on_exc=BadInput.IGNORE):
+def merge(data, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a string or list of house number series and returns elements merged
     into sequences if possible.

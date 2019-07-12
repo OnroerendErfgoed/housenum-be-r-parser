@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 import housenumparser
-from housenumparser import BadInput
-from housenumparser.elements import BisLetter
-from housenumparser.elements import BisNumber
-from housenumparser.elements import BusLetter
-from housenumparser.elements import BusNumber
-from housenumparser.elements import HouseNumber
+from housenumparser.element import BisLetter
+from housenumparser.element import BisNumber
+from housenumparser.element import BusLetter
+from housenumparser.element import BusNumber
+from housenumparser.element import HouseNumber
+from housenumparser.element import ReadException
 
 
 def test_single_number():
@@ -233,8 +233,9 @@ def test_bis_number_and_house_number_sequence():
 
 def test_invalid_input_keep_original():
     label = 'A,1/3,?'
-    house_numbers = housenumparser.split(label,
-                                         on_exc=BadInput.KEEP_ORIGINAL)
+    house_numbers = housenumparser.split(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
     assert isinstance(house_numbers, list)
     assert 3 == len(house_numbers)
     assert 'A' == str(house_numbers[0])
@@ -243,7 +244,8 @@ def test_invalid_input_keep_original():
 
 
 def test_invalid_input_ignore_errors():
-    house_numbers = housenumparser.split('A,1/3,?', on_exc=BadInput.IGNORE)
+    house_numbers = housenumparser.split('A,1/3,?',
+                                         on_exc=ReadException.Action.ERROR_MSG)
     assert isinstance(house_numbers, list)
     assert 3 == len(house_numbers)
     assert 'Could not parse/understand' == str(house_numbers[0])
@@ -252,7 +254,8 @@ def test_invalid_input_ignore_errors():
 
 
 def test_bogus_input_drop_errors():
-    house_numbers = housenumparser.split('A,1/3,?', on_exc=BadInput.DROP)
+    house_numbers = housenumparser.split('A,1/3,?',
+                                         on_exc=ReadException.Action.DROP)
     assert isinstance(house_numbers, list)
     assert 1 == len(house_numbers)
     assert '1/3' == str(house_numbers[0])
@@ -260,8 +263,9 @@ def test_bogus_input_drop_errors():
 
 def test_input_with_spaces():
     label = ' A , 1/3 , 5 - 7 '
-    house_numbers = housenumparser.split(label,
-                                         on_exc=BadInput.KEEP_ORIGINAL)
+    house_numbers = housenumparser.split(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
     assert isinstance(house_numbers, list)
     assert 4 == len(house_numbers)
     assert 'A' == str(house_numbers[0])
