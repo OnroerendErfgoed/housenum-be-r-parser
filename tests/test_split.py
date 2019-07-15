@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+import pytest
+
 import housenumparser
 from housenumparser.element import BisLetter
 from housenumparser.element import BisNumber
@@ -267,6 +269,11 @@ def test_bogus_input_drop_errors():
     assert isinstance(house_numbers, list)
     assert 1 == len(house_numbers)
     assert '1/3' == str(house_numbers[0])
+
+
+def test_bogus_input_raise_errors():
+    with pytest.raises(ValueError):
+        housenumparser.split('A,1/3,?', on_exc=ReadException.Action.RAISE)
 
 
 def test_input_with_spaces():
