@@ -20,4 +20,3 @@ pep8-naming==0.8.2  # checks naming convention
 # Sphinx documentation
 Sphinx==2.1.2; python_version >= '3.6'
 Sphinx==1.8.5; python_version < '3.6'
-oe-sphinx-theme==0.2.0

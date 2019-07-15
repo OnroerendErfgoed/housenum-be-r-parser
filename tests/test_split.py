@@ -190,6 +190,14 @@ def test_bis_letter_sequence():
     assert '25F' == str(house_numbers[3])
 
 
+def test_bis_letter_sequence_wrong():
+    label = '25F-C'
+    house_numbers = housenumparser.split(label)
+    assert isinstance(house_numbers, list)
+    assert len(house_numbers) == 1
+    assert 'Incorrect range: 25F-C' == str(house_numbers[0])
+
+
 def test_bis_number_sequence():
     label = '25/3-7'
     house_numbers = housenumparser.split(label)

@@ -20,9 +20,9 @@ def group(data):
     """
     Groups all `SingleElement` objects by their type.
 
-    :param data: A list of :class: `SingleElement`. Supported types:
-                 HouseNumber, BisNumber, BisLetter, BusNumber, BusLetter
-    :results: A dictionary containing lists of :class: `SingleElement`.
+    :param data: A list of :class:`.element.SingleElement`. Supported types:
+       HouseNumber, BisNumber, BisLetter, BusNumber, BusLetter.
+    :results: A dictionary containing lists of :class:`.element.SingleElement`.
     """
     result = {
         'house_numbers': [],
@@ -51,9 +51,10 @@ def merge_data(data):
 
     The input data is expected to be as returned by the `group` function.
 
-    :param data: A dictionary containing lists of :class: `SingleElement`.
-    :returns: A list of :class: `SingleElement` and if possible
-              :class: `SequenceElement`.
+    :param data: A dictionary containing lists of
+       :class:`.element.SingleElement`.
+    :returns: A list of :class:`.element.SingleElement` and if possible
+       :class:`.element.SequenceElement`.
     """
     merged_data = []
     merged_data.extend(
@@ -127,13 +128,21 @@ def merge_numbers(data, single_result, sequence_result, allowed_steps):
     while traversing, and if the difference between the current number and the
     next number is one of the `allowed_steps` it's a sequence.
 
-    :param data: List of ints.
-    :param single_result: Callable, takes 1 parameter. Should return a
-                          SingleElement instance.
-    :param sequence_result: Callable, takes 2 parameter: first, last. Should
-                            return a SequenceElement instance.
+    :type data: list[int]
+    :param data: numbers in which to find sequences.
+
+    :type single_result: Callable[int]
+    :param single_result: function which takes 1 parameter. Should return a
+       SingleElement instance.
+
+    :type sequence_result: Callable[int, int]
+    :param sequence_result: function which takes 2 parameter: first, last.
+       Should return a SequenceElement instance.
+
+    :type allowed_steps: tuple
     :param allowed_steps: steps allowed between 2 elements to be in a sequence
-    :returns: List of :class: `Element`, using Sequences if possible.
+
+    :returns: List of :class:`.element.Element`, using Sequences if possible.
     """
     data.sort()
     total_len = len(data)

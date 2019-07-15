@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
 """
-Module which reads a series of house numbers.
- eg: "23 bus 5, 23 bus 6" -> array (BusNumber "23 bus 5", BusNumber "23
- B-6")
- eg: "23", "24 bus 2" -> array (HouseNumber "23", BusNumber "24 bus 2")
- eg: "25-27" -> array (HouseNumberSequence "25, 26-27")
+Module which reads string data into :class:`housenumparser.element.Element`
+elements.
+
+eg:
+- "23 bus 5, 23 bus 6" -> [<BusNumber> "23 bus 5", <BusNumber> "23 B-6"]
+- "23", "24 bus 2" -> [<HouseNumber> "23", <BusNumber> "24 bus 2"]
+- "25-27" -> [<HouseNumberSequence> "25-26", <HouseNumber> "27"]
 """
 import re
 
@@ -25,13 +27,18 @@ def read_data(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a comma-seperated string of house number elements.
 
-    :param data: A :class: `String` with comma-seperated house numbers
+    :type data: str
+    :param data: A :class:`str` with comma-seperated house numbers
+
+    :type step: int
     :param step: Amount of house numbers per step. Commonly 1 or 2.
-                 Default None.
-                 When `None`, it will use 2 if beginning and ending of a
-                 series are both even or uneven, 1 otherwise.
-    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
-                   Default ReadException.Action.IGNORE
+       Default None.
+       When `None`, it will use 2 if beginning and ending of a
+       series are both even or uneven, 1 otherwise.
+
+    :type on_exc: .element.ReadException.Action
+    :param on_exc: Flag on how to treat incorrect data. Default ERROR_MSG.
+
     :returns: A list from of the data.
     """
     return read_iterable(str(data).split(","), step=step, on_exc=on_exc)
@@ -41,15 +48,19 @@ def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses an iterable of house number element strings.
 
-    :param inputs: A `list` containing strings of house numbers
-                   and/or house number series objects.
+    :type inputs: list[str]
+    :param inputs: A list of house numbers and/or house number series.
+
+    :type step: int
     :param step: Amount of house numbers per step. Commonly 1 or 2.
-                 Default None.
-                 When `None`, it will use 2 if beginning and ending of a
-                 series are both even or uneven, 1 otherwise.
-    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
-                   Default ReadException.Action.IGNORE
-    :returns: A list of :class: `Element`.
+       Default None.
+       When `None`, it will use 2 if beginning and ending of a series are
+       both even or uneven, 1 otherwise.
+
+    :type on_exc: .element.ReadException.Action
+    :param on_exc: Flag on how to treat incorrect data. Default ERROR_MSG.
+
+    :returns: A list of :class:`.element.Element`.
     """
     result = []
     for data in inputs:
@@ -64,14 +75,20 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     Parses a single house number element string.
 
+    :type data: str
     :param data: A String representating a house number.
+
+    :type step: int
     :param step: Amount of house numbers per step. Commonly 1 or 2.
-                 Default None.
-                 When `None`, it will use 2 if beginning and ending of a
-                 series are both even or uneven, 1 otherwise.
-    :param on_exc: `ReadException.Action`. Flag on how to treat incorrect data.
-                   Default ReadException.Action.IGNORE
-    :returns: A :class: `Element` OR an exception in case of incorrect data.
+       Default None.
+       When `None`, it will use 2 if beginning and ending of a
+       series are both even or uneven, 1 otherwise.
+
+    :type on_exc: ReadException.Action
+    :param on_exc: Flag on how to treat incorrect data. Default ERROR_MSG.
+
+    :returns: A :class:`.element.Element` OR an exception in case of
+       incorrect data.
     """
     element_classes = [BusNumberSequence, BusLetterSequence, BisNumberSequence,
                        BisLetterSequence, BusNumber, BusLetter, BisNumber,
