@@ -20,8 +20,10 @@ def group(data):
     """
     Groups all `SingleElement` objects by their type.
 
-    :param data: A list of :class:`.element.SingleElement`. Supported types:
-       HouseNumber, BisNumber, BisLetter, BusNumber, BusLetter.
+    :type data: list[.element.SingleElement]
+    :param data: Supported types in the list: HouseNumber, BisNumber,
+       BisLetter, BusNumber, BusLetter.
+
     :results: A dictionary containing lists of :class:`.element.SingleElement`.
     """
     result = {
@@ -49,10 +51,9 @@ def merge_data(data):
     """
     Merges single elements into sequences where possible.
 
-    The input data is expected to be as returned by the `group` function.
+    :type data: dict[str, list[.element.SingleElement]]
+    :param data: data as returned by the `group` function
 
-    :param data: A dictionary containing lists of
-       :class:`.element.SingleElement`.
     :returns: A list of :class:`.element.SingleElement` and if possible
        :class:`.element.SequenceElement`.
     """

@@ -10,6 +10,7 @@ README = open(os.path.join(here, 'README.rst')).read()
 
 
 requires = [
+    'enum34;python_version < "3.4"'
 ]
 
 setup(

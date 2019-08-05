@@ -9,8 +9,7 @@ def split(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     Parses a string of house number series and returns single numbers.
 
     :type data: Union[str, list[str]]
-    :param data: String or list of strings of house number and/or house
-       number series representations
+    :param data: house number and/or house number series representations
 
     :type step: int
     :param step: Amount of house numbers per step. Commonly 1 or 2.
@@ -36,8 +35,7 @@ def merge(data, on_exc=ReadException.Action.ERROR_MSG):
     into sequences if possible.
 
     :type data: Union[str, list[str]]
-    :param data: String or list of strings of house number and/or house
-       number series representations
+    :param data: house number and/or house number series representations
 
     :type on_exc: :class:`.element.ReadException.Action`
     :param on_exc: Flag on how to treat incorrect data. Default ERROR_MSG.

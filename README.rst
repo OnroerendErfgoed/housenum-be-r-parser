@@ -14,3 +14,17 @@ Description
 ------------
 
 Splits ranges of Belgian house numbers into individual ones and vice versa.
+
+
+Building documentation
+----------------------
+
+After installing dev-requirements, execute the following in the docs folder.
+
+.. code::
+
+   sphinx-apidoc -f --separate --module-first --implicit-namespaces -o source/ ../housenumparser
+   sphinx-build -a -b html source build
+
+After these 2 commands the docs folder should now contain a build folder which
+will have an index.html that you can open in a browser.
