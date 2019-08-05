@@ -51,7 +51,12 @@ coverage.xml
 
 # Sphinx documentation
 docs/_build/
+# Generated files for Sphinx documentation
+docs/source/housenumparser.element.rst
+docs/source/housenumparser.merger.rst
+docs/source/housenumparser.reader.rst
+docs/source/housenumparser.rst
+docs/source/modules.rst
 
 # idea
 .idea
-

@@ -1,0 +1,5 @@
+[flake8]
+max-line-length = 100
+application_import_names=housenumparser
+import-order-style=pycharm
+exclude=.svn,CVS,.bzr,.hg,.git,__pycache__,.venv*

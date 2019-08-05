@@ -1,173 +1,182 @@
-from housenumparser.elements import (
-    Huisnummer,
-    Bisnummer,
-    Busnummer,
-    Busletter,
-    Bisletter,
-    HuisnummerReeks,
-    BisnummerReeks,
-    BisletterReeks,
-    BusnummerReeks,
-    BusletterReeks,
-    ReadException
-)
-'''
-class which takes a string of housenumbers and turns them into series.
-'''
+# -*- coding: utf-8 -*-
+"""
+Module which takes a string of house numbers and turns them into series.
+"""
+import collections
+
+from housenumparser.element import BisLetter
+from housenumparser.element import BisLetterSequence
+from housenumparser.element import BisNumber
+from housenumparser.element import BisNumberSequence
+from housenumparser.element import BusLetter
+from housenumparser.element import BusLetterSequence
+from housenumparser.element import BusNumber
+from housenumparser.element import BusNumberSequence
+from housenumparser.element import HouseNumber
+from housenumparser.element import HouseNumberSequence
 
 
-class Merger():
-    '''
-    :param input: A list :class: `EnkelElement`.
-    :results: A dictionary containing seperated lists of
-        :class: `EnkelElement`.
-    '''
-    def group(self, input):
-        result = {
-            'huisnummer': [], 'bisnummer': [],
-            'bisletter': [], 'busnummer': [], 'busletter': []
-        }
-        for x in input:
-            if x.__class__ == Huisnummer:
-                result['huisnummer'].append(int(x.getHuisnummer()))
-            elif x.__class__ == Bisnummer:
-                result['bisnummer'].append(x)
-            elif x.__class__ == Bisletter:
-                result['bisletter'].append(x)
-            elif x.__class__ == Busnummer:
-                result['busnummer'].append(x)
-            elif x.__class__ == Busletter:
-                result['busletter'].append(x)
-        return self.mergeNummers(result)
+def group(data):
+    """
+    Groups all `SingleElement` objects by their type.
 
-    def mergeNummers(self, input):
-        '''
-        :param inputs: A dictionary containing seperated lists of
-            :class: `EnkelElement`.
-        :returns: A list of :class: `EnkelElement`
-            and if possible :class: `ReeksElement`.
-        '''
-        r = []
-        r.append(self.mergeHuisnummers(input['huisnummer']))
-        r.append(self.mergeN(input['bisnummer']))
-        r.append(self.mergeL(input['bisletter']))
-        r.append(self.mergeN(input['busnummer']))
-        r.append(self.mergeL(input['busletter']))
-        return r
+    :type data: list[.element.SingleElement]
+    :param data: Supported types in the list: HouseNumber, BisNumber,
+       BisLetter, BusNumber, BusLetter.
 
-    def mergeHuisnummers(self, input):
-        '''
-        :param input: List of integers.
-        :returns: List of :class: `HuisnummerReeks`(if possible)
-            and :class: `Huisnummer`.
-        '''
-        def loop(input, rest, r):
-            for y in [2, 1]:
-                while len(input) > 1:
-                    begin = input[0]
-                    einde = input[0]
-                    while einde + y in input:
-                        input.remove(einde)
-                        einde += y
-                    if begin != einde:
-                        r.append(HuisnummerReeks(begin, einde))
-                        input.remove(einde)
-                    elif y == 1:
-                        rest.append(einde)
-                        input.remove(einde)
-                    z = loop(input, rest, r)
-                    r = z['r']
-                    rest = z['rest']
-                if len(input) == 1:
-                    rest.append(input[0])
-                    input.remove(input[0])
-            return {'r': r, 'rest': rest}
-        if input == []:
-            return []
-        input.sort()
-        begin = input[0]
-        einde = input[0]
-        z = loop(input, [], [])
-        rest = z['rest']
-        r = z['r']
-        for x in rest:
-            r.append(Huisnummer(x))
-        return r
+    :results: A dictionary containing lists of :class:`.element.SingleElement`.
+    """
+    result = {
+        'house_numbers': [],
+        'bis_numbers': [],
+        'bis_letters': [],
+        'bus_numbers': [],
+        'bus_letters': []
+    }
+    for x in data:
+        if isinstance(x, HouseNumber):
+            result['house_numbers'].append(x)
+        elif isinstance(x, BisNumber):
+            result['bis_numbers'].append(x)
+        elif isinstance(x, BisLetter):
+            result['bis_letters'].append(x)
+        elif isinstance(x, BusNumber):
+            result['bus_numbers'].append(x)
+        elif isinstance(x, BusLetter):
+            result['bus_letters'].append(x)
+    return result
 
-    def mergeN(self, input):
-        '''
-        :param input: List of :class: `Bisnummer`.
-        :returns: List of :class: `BisnummerReeks`(if possible)
-            and :class: `Bisnummer`.
-        :OR:
-        :param input: List of :class: `Busnummer`.
-        :returns: List of :class: `BusnummerReeks`(if possible)
-            and :class: `Busnummer`.
-        '''
-        r = {}
-        result = []
-        z = []
-        for x in input:
-            huis = int(x.getHuisnummer())
-            bis = int(x.getBiselement())
-            if huis not in r:
-                r[huis] = [bis]
+
+def merge_data(data):
+    """
+    Merges single elements into sequences where possible.
+
+    :type data: dict[str, list[.element.SingleElement]]
+    :param data: data as returned by the `group` function
+
+    :returns: A list of :class:`.element.SingleElement` and if possible
+       :class:`.element.SequenceElement`.
+    """
+    merged_data = []
+    merged_data.extend(
+        merge_numbers([obj.house_number for obj in data['house_numbers']],
+                      lambda num: HouseNumber(num),
+                      lambda first, last: HouseNumberSequence(first, last),
+                      (1, 2))
+    )
+    # For anything else below here, we must first "group by" the data
+    # per house number
+    numbers_per_house = collections.defaultdict(list)
+    for element in data['bis_numbers']:
+        numbers_per_house[element.house_number].append(element.bis_number)
+    for house_number, numbers in numbers_per_house.items():
+        merged_data.extend(
+            merge_numbers(
+                numbers, lambda num: BisNumber(house_number, num),
+                lambda first, last: BisNumberSequence(house_number, first,
+                                                      last),
+                (1,))
+        )
+    numbers_per_house = collections.defaultdict(list)
+    for element in data['bus_numbers']:
+        numbers_per_house[element.house_number].append(element.bus_number)
+    for house_number, numbers in numbers_per_house.items():
+        merged_data.extend(
+            merge_numbers(
+                numbers, lambda num: BusNumber(house_number, num),
+                lambda first, last: BusNumberSequence(house_number, first,
+                                                      last),
+                (1,))
+        )
+    # Treat letters the same as numbers, use `ord` and `chr` to turn the
+    # letters into numbers and back into letters.
+    letters_per_house = collections.defaultdict(list)
+    for element in data['bis_letters']:
+        letters_per_house[element.house_number].append(ord(element.bis_letter))
+    for house_number, numbers in letters_per_house.items():
+        merged_data.extend(
+            merge_numbers(
+                numbers, lambda num: BisLetter(house_number, chr(num)),
+                lambda first, last: BisLetterSequence(house_number, chr(first),
+                                                      chr(last)),
+                (1,))
+        )
+    letters_per_house = collections.defaultdict(list)
+    for element in data['bus_letters']:
+        letters_per_house[element.house_number].append(ord(element.bus_letter))
+    for house_number, numbers in letters_per_house.items():
+        merged_data.extend(
+            merge_numbers(
+                numbers, lambda num: BusLetter(house_number, chr(num)),
+                lambda first, last: BusLetterSequence(house_number, chr(first),
+                                                      chr(last)),
+                (1,))
+        )
+    return merged_data
+
+
+def merge_numbers(data, single_result, sequence_result, allowed_steps):
+    """
+    Takes a list of integers and merges them into sequences.
+
+    The list of ints (data) will be traversed and whenever it finds a single
+    value, it will call `single_result` and add the result to a new list.
+    For every sequence it finds by traversing over the data, it will call
+    `sequence_result` and add that to the new list. When the data is
+    traversed entirely, the new list returns.
+
+    To determine whether it's a sequence or not, the next number is previewed
+    while traversing, and if the difference between the current number and the
+    next number is one of the `allowed_steps` it's a sequence.
+
+    :type data: list[int]
+    :param data: numbers in which to find sequences.
+
+    :type single_result: Callable[int]
+    :param single_result: function which takes 1 parameter. Should return a
+       SingleElement instance.
+
+    :type sequence_result: Callable[int, int]
+    :param sequence_result: function which takes 2 parameter: first, last.
+       Should return a SequenceElement instance.
+
+    :type allowed_steps: tuple
+    :param allowed_steps: steps allowed between 2 elements to be in a sequence
+
+    :returns: List of :class:`.element.Element`, using Sequences if possible.
+    """
+    data.sort()
+    total_len = len(data)
+    data = data + [-1, -1]
+    result = []
+
+    start = end = step = None
+    index = 0
+    while index < total_len:
+        first = data[index]
+        second = data[index + 1]
+        index += 1
+
+        # If no current sequence going on: Start new sequence or single number
+        if step is None:
+            step = second - first
+            if step not in allowed_steps:
+                # Add a single house number, no sequence possible
+                result.append(single_result(first))
+                step = None
+                continue
             else:
-                r[huis].append(bis)
-        z = []
-        for y in r:
-            begin = r[y][0]
-            einde = r[y][0]
-            while einde + 1 in r[y]:
-                einde += 1
-            if begin != einde:
-                result.append(self.getReeks(x)(y, begin, einde))
-            else:
-                result.append(x.__class__(y, r[y][0]))
-        return result
-
-    def mergeL(self, input):
-        '''
-        :param input: List of :class: `Bisletter`.
-        :returns: List of :class: `BisletterReeks`(if possible)
-            and :class: `Bisletter`.
-        :OR:
-        :param input: List of :class: `Busnummer`.
-        :returns: List of :class: `BusletterReeks`(if possible)
-            and :class: `Busletter`.
-        '''
-        r = {}
-        result = []
-        z = []
-        for x in input:
-            huis = int(x.getHuisnummer())
-            bus = x.getBiselement()
-            if huis not in r:
-                r[huis] = [bus]
-            else:
-                r[huis].append(bus)
-        z = []
-        for y in r:
-            begin = r[y][0]
-            einde = r[y][0]
-            while chr(ord(einde) + 1) in r[y]:
-                einde = chr(ord(einde) + 1)
-            if begin != einde:
-                result.append(self.getReeks(x)(y, begin, einde))
-            else:
-                result.append(x.__class__(y, begin))
-        return result
-
-    def getReeks(self, input):
-        '''
-        :param input: A :class: `EnkelElement`
-        :results: Matching housenumber series class
-        '''
-        if input.__class__ == Bisnummer:
-            return BisnummerReeks
-        if input.__class__ == Busnummer:
-            return BusnummerReeks
-        if input.__class__ == Busletter:
-            return BusletterReeks
-        if input.__class__ == Bisletter:
-            return BisletterReeks
+                # Start a new sequence, store the starting number.
+                start = first
+        # The next number is still valid for the current sequence.
+        if second - first == step:
+            end = second
+        else:  # This marks the end of the sequence.
+            if step == 1 and 2 in allowed_steps and (end - start) % 2 == 0:
+                # If 2 steps are allowed, 1-5 is actually 1,3,5 and not
+                # 1,2,3,4,5 - So we create 1-4, and treat the 5 as new.
+                end = end - step
+                index -= 1
+            result.append(sequence_result(start, end))
+            step = None
+    return result
