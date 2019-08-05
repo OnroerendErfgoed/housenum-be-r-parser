@@ -276,6 +276,13 @@ def test_bogus_input_raise_errors():
         housenumparser.split('A,1/3,?', on_exc=ReadException.Action.RAISE)
 
 
+def test_split_wrong_on_exc():
+    label = 'A,1/3,?'
+    with pytest.raises(ValueError) as e:
+        housenumparser.split(label, on_exc='invalid')
+    assert 'Not implemented on_exc: invalid' == str(e.value)
+
+
 def test_input_with_spaces():
     label = ' A , 1/3 , 5 - 7 '
     house_numbers = housenumparser.split(
@@ -306,3 +313,36 @@ def test_house_numbers_with_step_2():
     assert 2 == len(house_numbers)
     assert '10' == str(house_numbers[0])
     assert '12' == str(house_numbers[1])
+
+
+def test_split_wrong_house_number_range():
+    label = '10-5'
+    with pytest.raises(ValueError) as e:
+        housenumparser.split(label, on_exc=ReadException.Action.RAISE)
+    assert 'Incorrect range: 10-5' == str(e.value)
+
+
+def test_split_wrong_bus_number_range():
+    label = '1 bus 6-2'
+    with pytest.raises(ValueError) as e:
+        housenumparser.split(label, on_exc=ReadException.Action.RAISE)
+    assert 'Incorrect range: 1 bus 6-2' == str(e.value)
+
+
+def test_split_wrong_bis_number_range():
+    label = '1/6-2'
+    with pytest.raises(ValueError) as e:
+        housenumparser.split(label, on_exc=ReadException.Action.RAISE)
+    assert 'Incorrect range: 1/6-2' == str(e.value)
+
+
+def test_split_wrong_bus_letter_range():
+    label = '1 bus D-A'
+    with pytest.raises(ValueError) as e:
+        housenumparser.split(label, on_exc=ReadException.Action.RAISE)
+    assert 'Incorrect range: 1 bus D-A' == str(e.value)
+
+
+def test_wrong_on_exc():
+    element = ReadException('error_msg', on_exc='invalid')
+    assert '<ReadException> Not implemented on_exc: invalid' == str(element)

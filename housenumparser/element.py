@@ -93,7 +93,7 @@ class ReadException(Element):
             return self.data
         if self.on_exc == ReadException.Action.ERROR_MSG:
             return '{}: {}'.format(self.error, self.data)
-        return '<ReadException> Not implemented on_exc: ' + self.on_exc.name
+        return '<ReadException> Not implemented on_exc: ' + str(self.on_exc)
 
 
 class SequenceElement(Element):
@@ -128,6 +128,8 @@ class HouseNumberSequence(SequenceElement):
         super(HouseNumberSequence, self).__init__(
             first_house_number, last_house_number=last_house_number
         )
+        if self.first_house_number > self.last_house_number:
+            raise ValueError('Incorrect range')
 
     def _default_step(self, first, last):
         """
@@ -152,8 +154,6 @@ class HouseNumberSequence(SequenceElement):
         """
          :returns: A list of :class:`HouseNumber`
         """
-        if self.first_house_number > self.last_house_number:
-            return [ReadException('Incorrect range', data=str(self))]
         return [HouseNumber(number) for number
                 in range(self.first_house_number, self.last_house_number + 1,
                          self.step)]
@@ -182,6 +182,8 @@ class BisNumberSequence(SequenceElement):
             house_number, first_bis_number=first_bis_number,
             last_bis_number=last_bis_number
         )
+        if self.first_bis_number > self.last_bis_number:
+            raise ValueError('Incorrect range')
 
     def __str__(self):
         return ('{house_number}/{first_bis}-{last_bis}'
@@ -193,8 +195,6 @@ class BisNumberSequence(SequenceElement):
         """
         :returns: A list of :class:`BisNumber`
         """
-        if self.first_bis_number > self.last_bis_number:
-            return [ReadException('Incorrect range', data=str(self))]
         return [BisNumber(self.house_number, bis_number) for bis_number
                 in range(self.first_bis_number, self.last_bis_number + 1)]
 
@@ -220,6 +220,10 @@ class BisLetterSequence(SequenceElement):
             house_number, first_bis_letter=first_bis_letter,
             last_bis_letter=last_bis_letter
         )
+        start = ord(self.first_bis_letter)
+        end = ord(self.last_bis_letter)
+        if start > end:
+            raise ValueError('Incorrect range')
 
     def __str__(self):
         return ('{house_number}{first_letter}-{last_letter}'
@@ -233,11 +237,8 @@ class BisLetterSequence(SequenceElement):
         """
         start = ord(self.first_bis_letter)
         end = ord(self.last_bis_letter)
-        if start > end:
-            return [ReadException('Incorrect range', data=str(self))]
         return [BisLetter(self.house_number, chr(i)) for i
-                in range(start,
-                         end + 1)]
+                in range(start, end + 1)]
 
 
 class BusNumberSequence(SequenceElement):
@@ -263,6 +264,8 @@ class BusNumberSequence(SequenceElement):
             house_number, first_bus_number=first_bus_number,
             last_bus_number=last_bus_number
         )
+        if self.first_bus_number > self.last_bus_number:
+            raise ValueError('Incorrect range')
 
     def __str__(self):
         return ('{house_number} bus {first_bus}-{last_bus}'
@@ -274,8 +277,6 @@ class BusNumberSequence(SequenceElement):
         """
         :returns: A list of :class:`BusNumber`
         """
-        if self.first_bus_number > self.last_bus_number:
-            return [ReadException('Incorrect range', data=str(self))]
         return [BusNumber(self.house_number, bus_number) for bus_number
                 in range(self.first_bus_number, self.last_bus_number + 1)]
 
@@ -303,6 +304,10 @@ class BusLetterSequence(SequenceElement):
             house_number, first_bus_letter=first_bus_letter,
             last_bus_letter=last_bus_letter
         )
+        start = ord(self.first_bus_letter)
+        end = ord(self.last_bus_letter)
+        if start > end:
+            raise ValueError('Incorrect range')
 
     def __str__(self):
         return ('{house_number} bus {first_letter}-{last_letter}'
@@ -314,10 +319,6 @@ class BusLetterSequence(SequenceElement):
         """
         :returns: A list of :class:`BusLetter`
         """
-        start = ord(self.first_bus_letter)
-        end = ord(self.last_bus_letter)
-        if start > end:
-            return [ReadException('Incorrect range', data=str(self))]
         return [BusLetter(self.house_number, chr(i)) for i
                 in range(ord(self.first_bus_letter),
                          ord(self.last_bus_letter) + 1)]

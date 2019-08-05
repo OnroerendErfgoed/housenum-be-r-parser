@@ -93,22 +93,33 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     element_classes = [BusNumberSequence, BusLetterSequence, BisNumberSequence,
                        BisLetterSequence, BusNumber, BusLetter, BisNumber,
                        BisLetter, HouseNumberSequence, HouseNumber]
-    data = re.sub(r'\s', '', data)
-    for element_class in element_classes:
-        match = element_class.regex.match(data)
-        if match:
-            args = [int(group) if group.isdigit() else group
-                    for group in match.groups()]
-            kwargs = {}
-            if element_class == HouseNumberSequence:
-                kwargs['step'] = step
-            return element_class(*args, **kwargs)
+    stripped_data = re.sub(r'\s', '', data)
+    exception = None
+    try:
+        for element_class in element_classes:
+            match = element_class.regex.match(stripped_data)
+            if match:
+                args = [int(group) if group.isdigit() else group
+                        for group in match.groups()]
+                kwargs = {}
+                if element_class == HouseNumberSequence:
+                    kwargs['step'] = step
+                return element_class(*args, **kwargs)
+    except ValueError as e:
+        exception = e
     if on_exc == ReadException.Action.RAISE:
-        raise ValueError("Could not parse/understand input: {}".format(data))
+        if exception:
+            msg = str(exception)
+        else:
+            msg = "Could not parse/understand"
+        raise ValueError(msg + ': ' + data)
     elif on_exc == ReadException.Action.DROP:
         return None
     elif on_exc in (ReadException.Action.ERROR_MSG,
                     ReadException.Action.KEEP_ORIGINAL):
-        return ReadException("Could not parse/understand", data=data,
-                             on_exc=on_exc)
-    raise Exception("Not implemented on_exc: " + on_exc.name)
+        if exception:
+            msg = str(exception)
+        else:
+            msg = "Could not parse/understand"
+        return ReadException(msg, data=data, on_exc=on_exc)
+    raise ValueError("Not implemented on_exc: " + str(on_exc))
