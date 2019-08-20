@@ -75,3 +75,11 @@ def test_house_number_no_sequences():
     house_numbers = [str(house_number) for house_number in house_numbers]
     assert '32' in house_numbers
     assert '37' in house_numbers
+
+
+def test_overlapping_ranges():
+    label = '1-11, 5-9'
+    house_numbers = housenumparser.merge(label)
+    assert isinstance(house_numbers, list)
+    assert 1 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
