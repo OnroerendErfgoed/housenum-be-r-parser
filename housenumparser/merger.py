@@ -145,6 +145,7 @@ def merge_numbers(data, single_result, sequence_result, allowed_steps):
 
     :returns: List of :class:`.element.Element`, using Sequences if possible.
     """
+    data = list(set(data))
     data.sort()
     total_len = len(data)
     data = data + [-1, -1]
