@@ -28,6 +28,22 @@ def test_all_forms():
     assert '33 bus A-C' in house_numbers
 
 
+def test_none():
+    label = [None, '1']
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    house_numbers = [str(house_number) for house_number in house_numbers]
+    assert 'None' in house_numbers
+    assert '1' in house_numbers
+    label = None
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    house_numbers = [str(house_number) for house_number in house_numbers]
+    assert 'None' in house_numbers
+
+
 def test_house_number_sequences():
     label = ('32, 34, 36, 38, 25, 27, 29, 31, 39, 40, 41, 42, 43, 44, 46, '
              '47, 48, 49, 50, 52, 54')

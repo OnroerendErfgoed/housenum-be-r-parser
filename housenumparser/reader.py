@@ -68,7 +68,7 @@ def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     result = []
     for data in inputs:
-        data = data.strip()
+        data = data.strip() if data else str(data)
         parsed_element = read_element(data, step=step, on_exc=on_exc)
         if parsed_element is not None:
             result.append(parsed_element)
