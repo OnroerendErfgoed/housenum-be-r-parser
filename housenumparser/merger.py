@@ -2,6 +2,8 @@
 """
 Module which takes a string of house numbers and turns them into series.
 """
+from __future__ import unicode_literals
+
 import collections
 
 from housenumparser.element import BisLetter

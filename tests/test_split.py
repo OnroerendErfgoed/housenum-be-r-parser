@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from builtins import str
+
 import pytest
 
 import housenumparser
@@ -344,5 +348,5 @@ def test_split_wrong_bus_letter_range():
 
 
 def test_wrong_on_exc():
-    element = ReadException('error_msg', on_exc='invalid')
-    assert '<ReadException> Not implemented on_exc: invalid' == str(element)
+    element = ReadException('error_msg', on_exc='ïnvalid')
+    assert '<ReadException> Not implemented on_exc: ïnvalid' == str(element)

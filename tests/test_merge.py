@@ -1,4 +1,8 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from builtins import str
+
 import pytest
 
 import housenumparser
@@ -95,7 +99,7 @@ def test_special_characters():
 
     The 'proper way' is dependant on the `on_exc` parameter.
     """
-    label = '1\x95B, 1-11'
+    label = u'1ëâB, 1-11'
     house_numbers = housenumparser.merge(label,
                                          on_exc=ReadException.Action.DROP)
     assert isinstance(house_numbers, list)
@@ -104,7 +108,7 @@ def test_special_characters():
 
     with pytest.raises(ValueError) as e:
         housenumparser.merge(label, on_exc=ReadException.Action.RAISE)
-    assert 'Could not parse/understand: 1\x95B' == str(e.value)
+    assert 'Could not parse/understand: 1ëâB' == str(e.value)
 
     house_numbers = housenumparser.merge(
         label, on_exc=ReadException.Action.KEEP_ORIGINAL
@@ -112,13 +116,11 @@ def test_special_characters():
     assert isinstance(house_numbers, list)
     assert 2 == len(house_numbers)
     assert '1-11' == str(house_numbers[0])
-    assert '1\x95B' == str(house_numbers[1])
+    assert '1ëâB' == str(house_numbers[1])
 
     house_numbers = housenumparser.merge(label,
                                          on_exc=ReadException.Action.ERROR_MSG)
     assert isinstance(house_numbers, list)
     assert 2 == len(house_numbers)
     assert '1-11' == str(house_numbers[0])
-    assert 'Could not parse/understand: 1\x95B' == str(house_numbers[1])
-
-
+    assert 'Could not parse/understand: 1ëâB' == str(house_numbers[1])
