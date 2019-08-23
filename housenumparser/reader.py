@@ -9,6 +9,7 @@ eg:
 - "25-27" -> [<HouseNumberSequence> "25-26", <HouseNumber> "27"]
 """
 import re
+from builtins import str
 
 from housenumparser.element import BisLetter
 from housenumparser.element import BisLetterSequence

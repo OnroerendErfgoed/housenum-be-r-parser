@@ -1,7 +1,11 @@
 # -*- coding: utf-8 -*-
+import logging
+
 from housenumparser import merger
 from housenumparser import reader
 from housenumparser.element import ReadException
+
+LOG = logging.getLogger(__name__)
 
 
 def split(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
@@ -22,11 +26,15 @@ def split(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
 
     :returns: A list of :class:`.element.SingleElement`
     """
-    if isinstance(data, list):
-        numbers = reader.read_iterable(data, step=step, on_exc=on_exc)
-    else:
-        numbers = reader.read_data(data, step=step, on_exc=on_exc)
-    return [item for number in numbers for item in number.split()]
+    try:
+        if isinstance(data, list):
+            numbers = reader.read_iterable(data, step=step, on_exc=on_exc)
+        else:
+            numbers = reader.read_data(data, step=step, on_exc=on_exc)
+        return [item for number in numbers for item in number.split()]
+    except Exception:  # noqa
+        LOG.error("Could not split data: {}".format(data))
+        raise
 
 
 def merge(data, on_exc=ReadException.Action.ERROR_MSG):
@@ -42,5 +50,9 @@ def merge(data, on_exc=ReadException.Action.ERROR_MSG):
 
     :returns: A list of :class:`.element.Element`
     """
-    numbers = split(data, on_exc=on_exc)
-    return merger.merge_data(merger.group(numbers))
+    try:
+        numbers = split(data, on_exc=on_exc)
+        return merger.merge_data(merger.group(numbers))
+    except Exception:  # noqa
+        LOG.error("Could not merge data: {}".format(data))
+        raise

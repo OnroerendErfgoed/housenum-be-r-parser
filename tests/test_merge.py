@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
+import pytest
+
 import housenumparser
+from housenumparser.element import ReadException
 
 
 def test_all_forms():
@@ -83,3 +86,39 @@ def test_overlapping_ranges():
     assert isinstance(house_numbers, list)
     assert 1 == len(house_numbers)
     assert '1-11' == str(house_numbers[0])
+
+
+def test_special_characters():
+    """
+    While we can't parse special characterse into house numbers, We still
+    should handle this in a proper way rather than just crashing.
+
+    The 'proper way' is dependant on the `on_exc` parameter.
+    """
+    label = '1\x95B, 1-11'
+    house_numbers = housenumparser.merge(label,
+                                         on_exc=ReadException.Action.DROP)
+    assert isinstance(house_numbers, list)
+    assert 1 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+
+    with pytest.raises(ValueError) as e:
+        housenumparser.merge(label, on_exc=ReadException.Action.RAISE)
+    assert 'Could not parse/understand: 1\x95B' == str(e.value)
+
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    assert isinstance(house_numbers, list)
+    assert 2 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+    assert '1\x95B' == str(house_numbers[1])
+
+    house_numbers = housenumparser.merge(label,
+                                         on_exc=ReadException.Action.ERROR_MSG)
+    assert isinstance(house_numbers, list)
+    assert 2 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+    assert 'Could not parse/understand: 1\x95B' == str(house_numbers[1])
+
+
