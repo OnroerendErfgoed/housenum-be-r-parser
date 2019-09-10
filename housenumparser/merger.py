@@ -2,6 +2,8 @@
 """
 Module which takes a string of house numbers and turns them into series.
 """
+from __future__ import unicode_literals
+
 import collections
 
 from housenumparser.element import BisLetter
@@ -14,6 +16,7 @@ from housenumparser.element import BusNumber
 from housenumparser.element import BusNumberSequence
 from housenumparser.element import HouseNumber
 from housenumparser.element import HouseNumberSequence
+from housenumparser.element import ReadException
 
 
 def group(data):
@@ -31,7 +34,8 @@ def group(data):
         'bis_numbers': [],
         'bis_letters': [],
         'bus_numbers': [],
-        'bus_letters': []
+        'bus_letters': [],
+        'bad_data': [],
     }
     for x in data:
         if isinstance(x, HouseNumber):
@@ -44,15 +48,20 @@ def group(data):
             result['bus_numbers'].append(x)
         elif isinstance(x, BusLetter):
             result['bus_letters'].append(x)
+        elif isinstance(x, ReadException):
+            result['bad_data'].append(x)
     return result
 
 
-def merge_data(data):
+def merge_data(data, on_exc=ReadException.Action.ERROR_MSG):
     """
     Merges single elements into sequences where possible.
 
     :type data: dict[str, list[.element.SingleElement]]
     :param data: data as returned by the `group` function
+
+    :type on_exc: :class:`.element.ReadException.Action`
+    :param on_exc: Flag on how to treat incorrect data. Default ERROR_MSG.
 
     :returns: A list of :class:`.element.SingleElement` and if possible
        :class:`.element.SequenceElement`.
@@ -112,6 +121,10 @@ def merge_data(data):
                                                       chr(last)),
                 (1,))
         )
+    # raise wouldn't have reached this point, drop needs no action.
+    if on_exc in (ReadException.Action.ERROR_MSG,
+                  ReadException.Action.KEEP_ORIGINAL):
+        merged_data.extend(data['bad_data'])
     return merged_data
 
 

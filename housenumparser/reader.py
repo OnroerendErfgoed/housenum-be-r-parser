@@ -8,7 +8,10 @@ eg:
 - "23", "24 bus 2" -> [<HouseNumber> "23", <BusNumber> "24 bus 2"]
 - "25-27" -> [<HouseNumberSequence> "25-26", <HouseNumber> "27"]
 """
+from __future__ import unicode_literals
+
 import re
+from builtins import str
 
 from housenumparser.element import BisLetter
 from housenumparser.element import BisLetterSequence
@@ -41,7 +44,8 @@ def read_data(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
 
     :returns: A list from of the data.
     """
-    return read_iterable(str(data).split(","), step=step, on_exc=on_exc)
+    return read_iterable(str(data).split(","), step=step,
+                         on_exc=on_exc)
 
 
 def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
@@ -64,7 +68,7 @@ def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
     """
     result = []
     for data in inputs:
-        data = data.strip()
+        data = data.strip() if data else str(data)
         parsed_element = read_element(data, step=step, on_exc=on_exc)
         if parsed_element is not None:
             result.append(parsed_element)

@@ -1,5 +1,12 @@
 # -*- coding: utf-8 -*-
+from __future__ import unicode_literals
+
+from builtins import str
+
+import pytest
+
 import housenumparser
+from housenumparser.element import ReadException
 
 
 def test_all_forms():
@@ -19,6 +26,22 @@ def test_all_forms():
     assert '44 bus 1' in house_numbers
     assert '4 bus 1-30' in house_numbers
     assert '33 bus A-C' in house_numbers
+
+
+def test_none():
+    label = [None, '1']
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    house_numbers = [str(house_number) for house_number in house_numbers]
+    assert 'None' in house_numbers
+    assert '1' in house_numbers
+    label = None
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    house_numbers = [str(house_number) for house_number in house_numbers]
+    assert 'None' in house_numbers
 
 
 def test_house_number_sequences():
@@ -83,3 +106,37 @@ def test_overlapping_ranges():
     assert isinstance(house_numbers, list)
     assert 1 == len(house_numbers)
     assert '1-11' == str(house_numbers[0])
+
+
+def test_special_characters():
+    """
+    While we can't parse special characterse into house numbers, We still
+    should handle this in a proper way rather than just crashing.
+
+    The 'proper way' is dependant on the `on_exc` parameter.
+    """
+    label = u'1ëâB, 1-11'
+    house_numbers = housenumparser.merge(label,
+                                         on_exc=ReadException.Action.DROP)
+    assert isinstance(house_numbers, list)
+    assert 1 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+
+    with pytest.raises(ValueError) as e:
+        housenumparser.merge(label, on_exc=ReadException.Action.RAISE)
+    assert 'Could not parse/understand: 1ëâB' == str(e.value)
+
+    house_numbers = housenumparser.merge(
+        label, on_exc=ReadException.Action.KEEP_ORIGINAL
+    )
+    assert isinstance(house_numbers, list)
+    assert 2 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+    assert '1ëâB' == str(house_numbers[1])
+
+    house_numbers = housenumparser.merge(label,
+                                         on_exc=ReadException.Action.ERROR_MSG)
+    assert isinstance(house_numbers, list)
+    assert 2 == len(house_numbers)
+    assert '1-11' == str(house_numbers[0])
+    assert 'Could not parse/understand: 1ëâB' == str(house_numbers[1])
