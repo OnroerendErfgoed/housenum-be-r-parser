@@ -413,7 +413,7 @@ class BusLetter(SingleElement):
     eg: "3 bus A" or "53 bus D"
     """
     sequence_class = BusLetterSequence
-    regex = re.compile(r'^(\d+)bus([a-zA-Z]+)$')
+    regex = re.compile(r'^(\d+)bus([a-zA-Z])$')
 
     def __init__(self, house_number, bus_letter):
         """
@@ -442,7 +442,7 @@ class BisLetter(SingleElement):
     eg: "3A" or "53D"
     """
     sequence_class = BisLetterSequence
-    regex = re.compile(r'^(\d+)[/_]?([a-zA-Z]+)$')
+    regex = re.compile(r'^(\d+)[/_]?([a-zA-Z])$')
 
     def __init__(self, house_number, bis_letter):
         """

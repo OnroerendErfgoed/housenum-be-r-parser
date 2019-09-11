@@ -44,6 +44,16 @@ def test_single_bis_letter():
     assert str(hnr) == '25A'
 
 
+def test_double_bis_letter():
+    label = '25AB'
+    house_numbers = housenumparser.split(label)
+    assert isinstance(house_numbers, list)
+    assert len(house_numbers) == 1
+    hnr = house_numbers[0]
+    assert isinstance(hnr, ReadException)
+    assert str(hnr) == 'Could not parse/understand: 25AB'
+
+
 def test_single_bis_number():
     label = '25/1'
     house_numbers = housenumparser.split(label)
@@ -82,6 +92,16 @@ def test_bus_letter():
     hnr = house_numbers[0]
     assert isinstance(hnr, BusLetter)
     assert str(hnr) == '25 bus A'
+
+
+def test_double_bus_letter():
+    label = '25 bus AB'
+    house_numbers = housenumparser.split(label)
+    assert isinstance(house_numbers, list)
+    assert len(house_numbers) == 1
+    hnr = house_numbers[0]
+    assert isinstance(hnr, ReadException)
+    assert str(hnr) == 'Could not parse/understand: 25 bus AB'
 
 
 def test_house_number_sequence():
