@@ -15,7 +15,7 @@ requires = [
 
 setup(
     name='housenumparser',
-    version='0.1.0',
+    version='0.1.1',
     description='housenum_be_r_parser',
     long_description=README,
     author='Onroerend Erfgoed',
