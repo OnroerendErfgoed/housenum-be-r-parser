@@ -76,14 +76,20 @@ def merge_data(data, on_exc=ReadException.Action.ERROR_MSG):
     # For anything else below here, we must first "group by" the data
     # per house number
     numbers_per_house = collections.defaultdict(list)
+    original_strings = {}
     for element in data['bis_numbers']:
         numbers_per_house[element.house_number].append(element.bis_number)
+        original_strings[element.house_number] = element.original_string
+
     for house_number, numbers in numbers_per_house.items():
         merged_data.extend(
             merge_numbers(
-                numbers, lambda num: BisNumber(house_number, num),
-                lambda first, last: BisNumberSequence(house_number, first,
-                                                      last),
+                numbers, lambda num: BisNumber(
+                    house_number, num, original_strings[house_number]
+                ),
+                lambda first, last: BisNumberSequence(
+                    house_number, first, last, original_strings[house_number]
+                ),
                 (1,))
         )
     numbers_per_house = collections.defaultdict(list)
