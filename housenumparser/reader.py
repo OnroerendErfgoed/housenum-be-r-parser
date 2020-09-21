@@ -108,6 +108,8 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
                 kwargs = {}
                 if element_class == HouseNumberSequence:
                     kwargs['step'] = step
+                if element_class in [BisNumber, BisNumberSequence]:
+                    kwargs['original_string'] = stripped_data
                 return element_class(*args, **kwargs)
     except ValueError as e:
         exception = e

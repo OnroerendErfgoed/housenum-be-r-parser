@@ -11,10 +11,10 @@ from housenumparser.element import ReadException
 
 def test_all_forms():
     label = ('32-36, 25-31, 1A-F, 2/1-10, 4 bus 1-30, 43, 44 bus 1, 45/1, '
-             '46A, 33 bus A-C')
+             '46A, 33 bus A-C, 132_1')
     house_numbers = housenumparser.merge(label)
     assert isinstance(house_numbers, list)
-    assert 10 == len(house_numbers)
+    assert 11 == len(house_numbers)
     house_numbers = [str(house_number) for house_number in house_numbers]
     assert '25-31' in house_numbers
     assert '32-36' in house_numbers
@@ -26,6 +26,7 @@ def test_all_forms():
     assert '44 bus 1' in house_numbers
     assert '4 bus 1-30' in house_numbers
     assert '33 bus A-C' in house_numbers
+    assert '132_1' in house_numbers
 
 
 def test_none():
