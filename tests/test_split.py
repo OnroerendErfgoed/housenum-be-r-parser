@@ -71,7 +71,7 @@ def test_bis_number_underscore():
     assert len(house_numbers) == 1
     hnr = house_numbers[0]
     assert isinstance(hnr, BisNumber)
-    assert str(hnr) == '111/1'
+    assert str(hnr) == '111_1'
 
 
 def test_bus_number():
