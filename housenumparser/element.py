@@ -411,8 +411,7 @@ class BusNumber(SingleElement):
         :type bus_number: int
         :param bus_number: Bus number
         """
-        super().__init__(house_number,
-                                        first_bus_number=bus_number)
+        super().__init__(house_number, first_bus_number=bus_number)
 
     @property
     def bus_number(self):
@@ -440,8 +439,7 @@ class BusLetter(SingleElement):
         :type bus_letter: str
         :param bus_letter: Bus letter
         """
-        super().__init__(house_number,
-                                        first_bus_letter=bus_letter)
+        super().__init__(house_number, first_bus_letter=bus_letter)
 
     @property
     def bus_letter(self):
@@ -469,8 +467,7 @@ class BisLetter(SingleElement):
         :type bis_letter: str
         :param bis_letter: Bis letter
         """
-        super().__init__(house_number,
-                                        first_bis_letter=bis_letter)
+        super().__init__(house_number, first_bis_letter=bis_letter)
 
     @property
     def bis_letter(self):
