@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 Module which reads string data into :class:`housenumparser.element.Element`
 elements.
@@ -8,10 +7,8 @@ eg:
 - "23", "24 bus 2" -> [<HouseNumber> "23", <BusNumber> "24 bus 2"]
 - "25-27" -> [<HouseNumberSequence> "25-26", <HouseNumber> "27"]
 """
-from __future__ import unicode_literals
 
 import re
-from builtins import str
 
 from housenumparser.element import BisLetter
 from housenumparser.element import BisLetterSequence
