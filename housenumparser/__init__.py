@@ -1,6 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import logging
 
 from housenumparser import merger
@@ -35,7 +32,7 @@ def split(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
             numbers = reader.read_data(data, step=step, on_exc=on_exc)
         return [item for number in numbers for item in number.split()]
     except Exception:  # noqa
-        LOG.error("Could not split data: {}".format(data))
+        LOG.error(f"Could not split data: {data}")
         raise
 
 
@@ -56,5 +53,5 @@ def merge(data, on_exc=ReadException.Action.ERROR_MSG):
         numbers = split(data, on_exc=on_exc)
         return merger.merge_data(merger.group(numbers))
     except Exception:  # noqa
-        LOG.error("Could not merge data: {}".format(data))
+        LOG.error(f"Could not merge data: {data}")
         raise
