@@ -15,7 +15,7 @@ requires = [
 
 setup(
     name='housenumparser',
-    version='0.1.2',
+    version='0.2.0',
     description='housenum_be_r_parser',
     long_description=README,
     author='Onroerend Erfgoed',
@@ -35,7 +35,6 @@ setup(
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Programming Language :: Python',
-        'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
     ],

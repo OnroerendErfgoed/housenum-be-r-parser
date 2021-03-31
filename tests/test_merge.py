@@ -1,8 +1,3 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
-from builtins import str
-
 import pytest
 
 import housenumparser
@@ -116,7 +111,7 @@ def test_special_characters():
 
     The 'proper way' is dependant on the `on_exc` parameter.
     """
-    label = u'1ëâB, 1-11'
+    label = '1ëâB, 1-11'
     house_numbers = housenumparser.merge(label,
                                          on_exc=ReadException.Action.DROP)
     assert isinstance(house_numbers, list)

@@ -1,12 +1,8 @@
-# -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
-from builtins import str
 from enum import Enum
 
 
-class Element(object):
+class Element:
     """
     A house number element.
 
@@ -83,7 +79,7 @@ class ReadException(Element):
         DROP = 4  # The error will be ignored, and not exist in the output.
 
     def __init__(self, error, data="", on_exc=Action.ERROR_MSG):
-        super(ReadException, self).__init__(-1)
+        super().__init__(-1)
         self.error = error
         self.data = data
         self.on_exc = on_exc
@@ -95,7 +91,7 @@ class ReadException(Element):
         if self.on_exc == ReadException.Action.KEEP_ORIGINAL:
             return self.data
         if self.on_exc == ReadException.Action.ERROR_MSG:
-            return '{}: {}'.format(self.error, self.data)
+            return f'{self.error}: {self.data}'
         return '<ReadException> Not implemented on_exc: ' + str(self.on_exc)
 
 
@@ -128,7 +124,7 @@ class HouseNumberSequence(SequenceElement):
         """
         self.step = step or self._default_step(first_house_number,
                                                last_house_number)
-        super(HouseNumberSequence, self).__init__(
+        super().__init__(
             first_house_number, last_house_number=last_house_number
         )
         if self.first_house_number > self.last_house_number:
@@ -184,7 +180,7 @@ class BisNumberSequence(SequenceElement):
         :type original_string: str
         :param original_string: Original string
         """
-        super(BisNumberSequence, self).__init__(
+        super().__init__(
             house_number, first_bis_number=first_bis_number,
             last_bis_number=last_bis_number
         )
@@ -231,7 +227,7 @@ class BisLetterSequence(SequenceElement):
         :type last_bis_letter: str
         :param last_bis_letter: Last letter of the series.
         """
-        super(BisLetterSequence, self).__init__(
+        super().__init__(
             house_number, first_bis_letter=first_bis_letter,
             last_bis_letter=last_bis_letter
         )
@@ -275,7 +271,7 @@ class BusNumberSequence(SequenceElement):
         :type last_bus_number: int
         :param last_bus_number: Last number of the series.
         """
-        super(BusNumberSequence, self).__init__(
+        super().__init__(
             house_number, first_bus_number=first_bus_number,
             last_bus_number=last_bus_number
         )
@@ -315,7 +311,7 @@ class BusLetterSequence(SequenceElement):
         :type last_bus_letter: str
         :param last_bus_letter: Last letter of the series.
         """
-        super(BusLetterSequence, self).__init__(
+        super().__init__(
             house_number, first_bus_letter=first_bus_letter,
             last_bus_letter=last_bus_letter
         )
@@ -379,7 +375,7 @@ class BisNumber(SingleElement):
         :type original_string: str
         :param bis_number: Original string
         """
-        super(BisNumber, self).__init__(
+        super().__init__(
             house_number,
             first_bis_number=bis_number,
         )
@@ -415,7 +411,7 @@ class BusNumber(SingleElement):
         :type bus_number: int
         :param bus_number: Bus number
         """
-        super(BusNumber, self).__init__(house_number,
+        super().__init__(house_number,
                                         first_bus_number=bus_number)
 
     @property
@@ -444,7 +440,7 @@ class BusLetter(SingleElement):
         :type bus_letter: str
         :param bus_letter: Bus letter
         """
-        super(BusLetter, self).__init__(house_number,
+        super().__init__(house_number,
                                         first_bus_letter=bus_letter)
 
     @property
@@ -473,7 +469,7 @@ class BisLetter(SingleElement):
         :type bis_letter: str
         :param bis_letter: Bis letter
         """
-        super(BisLetter, self).__init__(house_number,
+        super().__init__(house_number,
                                         first_bis_letter=bis_letter)
 
     @property
