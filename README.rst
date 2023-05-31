@@ -3,12 +3,12 @@ Housenum-be-r-parser
 
 A small library for merging and splitting sequences of Belgian house numbers.
     
-.. image:: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser.png?branch=master
-        :target: https://travis-ci.org/OnroerendErfgoed/housenum-be-r-parser
-.. image:: https://badge.fury.io/py/housenum-be-r-parser.png
-        :target: http://badge.fury.io/py/housenum-be-r-parser
-.. image:: https://coveralls.io/repos/OnroerendErfgoed/housenum-be-r-parser/badge.png?branch=master 
-        :target: https://coveralls.io/r/OnroerendErfgoed/housenum-be-r-parser?branch=master
+.. image:: https://app.travis-ci.com/OnroerendErfgoed/housenum-be-r-parser.png?branch=develop
+        :target: https://app.travis-ci.com/OnroerendErfgoed/housenum-be-r-parser
+.. image:: https://badge.fury.io/py/housenumparser.png
+        :target: http://badge.fury.io/py/housenumparser
+.. image:: https://coveralls.io/repos/OnroerendErfgoed/housenum-be-r-parser/badge.png?branch=develp
+        :target: https://coveralls.io/r/OnroerendErfgoed/housenum-be-r-parser?branch=develop
 
 Description
 ------------
