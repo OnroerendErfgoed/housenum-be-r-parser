@@ -13,9 +13,7 @@ before_install:
 install:
   - pip install -r requirements-dev.txt
   - python setup.py develop
-  - pip install -U pytest-cov coveralls
 script:
-  - flake8
   - py.test --cov housenumparser --cov-report term-missing tests
 after_success:
   coveralls
