@@ -28,26 +28,26 @@ def group(data):
     :results: A dictionary containing lists of :class:`.element.SingleElement`.
     """
     result = {
-        'house_numbers': [],
-        'bis_numbers': [],
-        'bis_letters': [],
-        'bus_numbers': [],
-        'bus_letters': [],
-        'bad_data': [],
+        "house_numbers": [],
+        "bis_numbers": [],
+        "bis_letters": [],
+        "bus_numbers": [],
+        "bus_letters": [],
+        "bad_data": [],
     }
     for x in data:
         if isinstance(x, HouseNumber):
-            result['house_numbers'].append(x)
+            result["house_numbers"].append(x)
         elif isinstance(x, BisNumber):
-            result['bis_numbers'].append(x)
+            result["bis_numbers"].append(x)
         elif isinstance(x, BisLetter):
-            result['bis_letters'].append(x)
+            result["bis_letters"].append(x)
         elif isinstance(x, BusNumber):
-            result['bus_numbers'].append(x)
+            result["bus_numbers"].append(x)
         elif isinstance(x, BusLetter):
-            result['bus_letters'].append(x)
+            result["bus_letters"].append(x)
         elif isinstance(x, ReadException):
-            result['bad_data'].append(x)
+            result["bad_data"].append(x)
     return result
 
 
@@ -66,69 +66,79 @@ def merge_data(data, on_exc=ReadException.Action.ERROR_MSG):
     """
     merged_data = []
     merged_data.extend(
-        merge_numbers([obj.house_number for obj in data['house_numbers']],
-                      lambda num: HouseNumber(num),
-                      lambda first, last: HouseNumberSequence(first, last),
-                      (1, 2))
+        merge_numbers(
+            [obj.house_number for obj in data["house_numbers"]],
+            lambda num: HouseNumber(num),
+            lambda first, last: HouseNumberSequence(first, last),
+            (1, 2),
+        )
     )
     # For anything else below here, we must first "group by" the data
     # per house number
     numbers_per_house = collections.defaultdict(list)
     original_strings = {}
-    for element in data['bis_numbers']:
+    for element in data["bis_numbers"]:
         numbers_per_house[element.house_number].append(element.bis_number)
         original_strings[element.house_number] = element.original_string
 
     for house_number, numbers in numbers_per_house.items():
         merged_data.extend(
             merge_numbers(
-                numbers, lambda num: BisNumber(
+                numbers,
+                lambda num: BisNumber(
                     house_number, num, original_strings[house_number]
                 ),
                 lambda first, last: BisNumberSequence(
                     house_number, first, last, original_strings[house_number]
                 ),
-                (1,))
+                (1,),
+            )
         )
     numbers_per_house = collections.defaultdict(list)
-    for element in data['bus_numbers']:
+    for element in data["bus_numbers"]:
         numbers_per_house[element.house_number].append(element.bus_number)
     for house_number, numbers in numbers_per_house.items():
         merged_data.extend(
             merge_numbers(
-                numbers, lambda num: BusNumber(house_number, num),
-                lambda first, last: BusNumberSequence(house_number, first,
-                                                      last),
-                (1,))
+                numbers,
+                lambda num: BusNumber(house_number, num),
+                lambda first, last: BusNumberSequence(house_number, first, last),
+                (1,),
+            )
         )
     # Treat letters the same as numbers, use `ord` and `chr` to turn the
     # letters into numbers and back into letters.
     letters_per_house = collections.defaultdict(list)
-    for element in data['bis_letters']:
+    for element in data["bis_letters"]:
         letters_per_house[element.house_number].append(ord(element.bis_letter))
     for house_number, numbers in letters_per_house.items():
         merged_data.extend(
             merge_numbers(
-                numbers, lambda num: BisLetter(house_number, chr(num)),
-                lambda first, last: BisLetterSequence(house_number, chr(first),
-                                                      chr(last)),
-                (1,))
+                numbers,
+                lambda num: BisLetter(house_number, chr(num)),
+                lambda first, last: BisLetterSequence(
+                    house_number, chr(first), chr(last)
+                ),
+                (1,),
+            )
         )
     letters_per_house = collections.defaultdict(list)
-    for element in data['bus_letters']:
+    for element in data["bus_letters"]:
         letters_per_house[element.house_number].append(ord(element.bus_letter))
     for house_number, numbers in letters_per_house.items():
         merged_data.extend(
             merge_numbers(
-                numbers, lambda num: BusLetter(house_number, chr(num)),
-                lambda first, last: BusLetterSequence(house_number, chr(first),
-                                                      chr(last)),
-                (1,))
+                numbers,
+                lambda num: BusLetter(house_number, chr(num)),
+                lambda first, last: BusLetterSequence(
+                    house_number, chr(first), chr(last)
+                ),
+                (1,),
+            )
         )
     # raise wouldn't have reached this point, drop needs no action.
-    if on_exc in (ReadException.Action.ERROR_MSG,
-                  ReadException.Action.KEEP_ORIGINAL):
-        merged_data.extend(data['bad_data'])
+    if on_exc in (ReadException.Action.ERROR_MSG, ReadException.Action.KEEP_ORIGINAL):
+        merged_data.extend(data["bad_data"])
     return merged_data
 
 

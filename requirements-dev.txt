@@ -1,10 +1,66 @@
-# Runtime requirements
---requirement requirements.txt
-
-# Testing
-pytest==6.2.5
-pytest-cov==3.0.0
-coveralls==3.3.1
-
-# Documentation
-Sphinx==4.3.2
+alabaster==1.0.0
+    # via sphinx
+babel==2.16.0
+    # via sphinx
+certifi==2024.8.30
+    # via requests
+charset-normalizer==3.3.2
+    # via requests
+coverage==7.6.1
+    # via
+    #   coveralls
+    #   pytest-cov
+coveralls==4.0.1
+    # via housenumparser (pyproject.toml)
+docopt==0.6.2
+    # via coveralls
+docutils==0.21.2
+    # via sphinx
+idna==3.10
+    # via requests
+imagesize==1.4.1
+    # via sphinx
+iniconfig==2.0.0
+    # via pytest
+jinja2==3.1.4
+    # via sphinx
+markupsafe==2.1.5
+    # via jinja2
+packaging==24.1
+    # via
+    #   pytest
+    #   sphinx
+pluggy==1.5.0
+    # via pytest
+pygments==2.18.0
+    # via sphinx
+pytest==8.3.3
+    # via
+    #   housenumparser (pyproject.toml)
+    #   pytest-cov
+pytest-cov==5.0.0
+    # via housenumparser (pyproject.toml)
+requests==2.32.3
+    # via
+    #   coveralls
+    #   sphinx
+snowballstemmer==2.2.0
+    # via sphinx
+sphinx==8.0.2
+    # via housenumparser (pyproject.toml)
+sphinxcontrib-applehelp==2.0.0
+    # via sphinx
+sphinxcontrib-devhelp==2.0.0
+    # via sphinx
+sphinxcontrib-htmlhelp==2.1.0
+    # via sphinx
+sphinxcontrib-jsmath==1.0.1
+    # via sphinx
+sphinxcontrib-qthelp==2.0.0
+    # via sphinx
+sphinxcontrib-serializinghtml==2.0.0
+    # via sphinx
+urllib3==2.2.3
+    # via requests
+uv==0.4.1
+    # via housenumparser (pyproject.toml)

@@ -10,10 +10,19 @@ class Element:
     This can be a house number, a house number series, readingerror, etc.
     """
 
-    def __init__(self, first_house_number, first_bis_number=-1,
-                 first_bis_letter=-1, first_bus_number=-1, first_bus_letter=-1,
-                 last_house_number=-1, last_bis_number=-1, last_bis_letter=-1,
-                 last_bus_number=-1, last_bus_letter=-1):
+    def __init__(
+        self,
+        first_house_number,
+        first_bis_number=-1,
+        first_bis_letter=-1,
+        first_bus_number=-1,
+        first_bus_letter=-1,
+        last_house_number=-1,
+        last_bis_number=-1,
+        last_bis_letter=-1,
+        last_bus_number=-1,
+        last_bus_letter=-1,
+    ):
         """
         :type first_house_number: int
         :param first_house_number: First house_number.
@@ -73,6 +82,7 @@ class ReadException(Element):
         """
         Enum of possible actions to take when encountering bad input.
         """
+
         RAISE = 1  # Raises exception on bad input
         ERROR_MSG = 2  # An error message will return
         KEEP_ORIGINAL = 3  # The original data will return
@@ -91,8 +101,8 @@ class ReadException(Element):
         if self.on_exc == ReadException.Action.KEEP_ORIGINAL:
             return self.data
         if self.on_exc == ReadException.Action.ERROR_MSG:
-            return f'{self.error}: {self.data}'
-        return '<ReadException> Not implemented on_exc: ' + str(self.on_exc)
+            return f"{self.error}: {self.data}"
+        return "<ReadException> Not implemented on_exc: " + str(self.on_exc)
 
 
 class SequenceElement(Element):
@@ -109,7 +119,8 @@ class HouseNumberSequence(SequenceElement):
     - "33, 34, 35, 36" -> "33-36"
     - "32, 33, 34, 35, 36"-> "32, 33-36"
     """
-    regex = re.compile(r'^(\d+)-(\d+)$')
+
+    regex = re.compile(r"^(\d+)-(\d+)$")
 
     def __init__(self, first_house_number, last_house_number, step=None):
         """
@@ -122,13 +133,10 @@ class HouseNumberSequence(SequenceElement):
         :type step: int
         :param step: Step to take between first and last element.
         """
-        self.step = step or self._default_step(first_house_number,
-                                               last_house_number)
-        super().__init__(
-            first_house_number, last_house_number=last_house_number
-        )
+        self.step = step or self._default_step(first_house_number, last_house_number)
+        super().__init__(first_house_number, last_house_number=last_house_number)
         if self.first_house_number > self.last_house_number:
-            raise ValueError('Incorrect range')
+            raise ValueError("Incorrect range")
 
     def _default_step(self, first, last):
         """
@@ -145,17 +153,20 @@ class HouseNumberSequence(SequenceElement):
         return 2 if first % 2 == last % 2 else 1
 
     def __str__(self):
-        return ('{first_house}-{last_house}'
-                .format(first_house=self.first_house_number,
-                        last_house=self.last_house_number))
+        return "{first_house}-{last_house}".format(
+            first_house=self.first_house_number, last_house=self.last_house_number
+        )
 
     def split(self):
         """
-         :returns: A list of :class:`HouseNumber`
+        :returns: A list of :class:`HouseNumber`
         """
-        return [HouseNumber(number) for number
-                in range(self.first_house_number, self.last_house_number + 1,
-                         self.step)]
+        return [
+            HouseNumber(number)
+            for number in range(
+                self.first_house_number, self.last_house_number + 1, self.step
+            )
+        ]
 
 
 class BisNumberSequence(SequenceElement):
@@ -164,9 +175,12 @@ class BisNumberSequence(SequenceElement):
 
     eg: "33/1, 32/2, 33/3" -> "33/1-3"
     """
-    regex = re.compile(r'^(\d+)[/_](\d+)-(\d+)$')
 
-    def __init__(self, house_number, first_bis_number, last_bis_number, original_string):
+    regex = re.compile(r"^(\d+)[/_](\d+)-(\d+)$")
+
+    def __init__(
+        self, house_number, first_bis_number, last_bis_number, original_string
+    ):
         """
         :type house_number: int
         :param house_number: House number.
@@ -181,24 +195,27 @@ class BisNumberSequence(SequenceElement):
         :param original_string: Original string
         """
         super().__init__(
-            house_number, first_bis_number=first_bis_number,
-            last_bis_number=last_bis_number
+            house_number,
+            first_bis_number=first_bis_number,
+            last_bis_number=last_bis_number,
         )
         self.original_string = original_string
         if self.first_bis_number > self.last_bis_number:
-            raise ValueError('Incorrect range')
+            raise ValueError("Incorrect range")
 
     def __str__(self):
-        if '_' in self.original_string:
-            return ('{house_number}_{first_bis}-{last_bis}'
-                    .format(house_number=self.house_number,
-                            first_bis=self.first_bis_number,
-                            last_bis=self.last_bis_number))
+        if "_" in self.original_string:
+            return "{house_number}_{first_bis}-{last_bis}".format(
+                house_number=self.house_number,
+                first_bis=self.first_bis_number,
+                last_bis=self.last_bis_number,
+            )
         else:
-            return ('{house_number}/{first_bis}-{last_bis}'
-                    .format(house_number=self.house_number,
-                            first_bis=self.first_bis_number,
-                            last_bis=self.last_bis_number))
+            return "{house_number}/{first_bis}-{last_bis}".format(
+                house_number=self.house_number,
+                first_bis=self.first_bis_number,
+                last_bis=self.last_bis_number,
+            )
 
     def split(self):
         """
@@ -214,7 +231,8 @@ class BisLetterSequence(SequenceElement):
     """
     A series of bis letters.
     """
-    regex = re.compile(r'^(\d+)/?([a-zA-Z]+)-([a-zA-Z]+)$')
+
+    regex = re.compile(r"^(\d+)/?([a-zA-Z]+)-([a-zA-Z]+)$")
 
     def __init__(self, house_number, first_bis_letter, last_bis_letter):
         """
@@ -228,19 +246,21 @@ class BisLetterSequence(SequenceElement):
         :param last_bis_letter: Last letter of the series.
         """
         super().__init__(
-            house_number, first_bis_letter=first_bis_letter,
-            last_bis_letter=last_bis_letter
+            house_number,
+            first_bis_letter=first_bis_letter,
+            last_bis_letter=last_bis_letter,
         )
         start = ord(self.first_bis_letter)
         end = ord(self.last_bis_letter)
         if start > end:
-            raise ValueError('Incorrect range')
+            raise ValueError("Incorrect range")
 
     def __str__(self):
-        return ('{house_number}{first_letter}-{last_letter}'
-                .format(house_number=self.house_number,
-                        first_letter=self.first_bis_letter,
-                        last_letter=self.last_bis_letter))
+        return "{house_number}{first_letter}-{last_letter}".format(
+            house_number=self.house_number,
+            first_letter=self.first_bis_letter,
+            last_letter=self.last_bis_letter,
+        )
 
     def split(self):
         """
@@ -248,8 +268,7 @@ class BisLetterSequence(SequenceElement):
         """
         start = ord(self.first_bis_letter)
         end = ord(self.last_bis_letter)
-        return [BisLetter(self.house_number, chr(i)) for i
-                in range(start, end + 1)]
+        return [BisLetter(self.house_number, chr(i)) for i in range(start, end + 1)]
 
 
 class BusNumberSequence(SequenceElement):
@@ -258,7 +277,8 @@ class BusNumberSequence(SequenceElement):
 
     eg: "33 bus 1, 32 bus 2, 33 bus 3" -> "33 bus 1-3"
     """
-    regex = re.compile(r'^(\d+)bus(\d+)-(\d+)$')
+
+    regex = re.compile(r"^(\d+)bus(\d+)-(\d+)$")
 
     def __init__(self, house_number, first_bus_number, last_bus_number):
         """
@@ -272,24 +292,28 @@ class BusNumberSequence(SequenceElement):
         :param last_bus_number: Last number of the series.
         """
         super().__init__(
-            house_number, first_bus_number=first_bus_number,
-            last_bus_number=last_bus_number
+            house_number,
+            first_bus_number=first_bus_number,
+            last_bus_number=last_bus_number,
         )
         if self.first_bus_number > self.last_bus_number:
-            raise ValueError('Incorrect range')
+            raise ValueError("Incorrect range")
 
     def __str__(self):
-        return ('{house_number} bus {first_bus}-{last_bus}'
-                .format(house_number=self.house_number,
-                        first_bus=self.first_bus_number,
-                        last_bus=self.last_bus_number))
+        return "{house_number} bus {first_bus}-{last_bus}".format(
+            house_number=self.house_number,
+            first_bus=self.first_bus_number,
+            last_bus=self.last_bus_number,
+        )
 
     def split(self):
         """
         :returns: A list of :class:`BusNumber`
         """
-        return [BusNumber(self.house_number, bus_number) for bus_number
-                in range(self.first_bus_number, self.last_bus_number + 1)]
+        return [
+            BusNumber(self.house_number, bus_number)
+            for bus_number in range(self.first_bus_number, self.last_bus_number + 1)
+        ]
 
 
 class BusLetterSequence(SequenceElement):
@@ -298,7 +322,8 @@ class BusLetterSequence(SequenceElement):
 
     eg: "33 bus A, 32 bus B, 33 bus C" -> "33 bus A-C"
     """
-    regex = re.compile(r'^(\d+)bus([a-zA-Z]+)-([a-zA-Z]+)$')
+
+    regex = re.compile(r"^(\d+)bus([a-zA-Z]+)-([a-zA-Z]+)$")
 
     def __init__(self, house_number, first_bus_letter, last_bus_letter):
         """
@@ -312,27 +337,30 @@ class BusLetterSequence(SequenceElement):
         :param last_bus_letter: Last letter of the series.
         """
         super().__init__(
-            house_number, first_bus_letter=first_bus_letter,
-            last_bus_letter=last_bus_letter
+            house_number,
+            first_bus_letter=first_bus_letter,
+            last_bus_letter=last_bus_letter,
         )
         start = ord(self.first_bus_letter)
         end = ord(self.last_bus_letter)
         if start > end:
-            raise ValueError('Incorrect range')
+            raise ValueError("Incorrect range")
 
     def __str__(self):
-        return ('{house_number} bus {first_letter}-{last_letter}'
-                .format(house_number=self.house_number,
-                        first_letter=self.first_bus_letter,
-                        last_letter=self.last_bus_letter))
+        return "{house_number} bus {first_letter}-{last_letter}".format(
+            house_number=self.house_number,
+            first_letter=self.first_bus_letter,
+            last_letter=self.last_bus_letter,
+        )
 
     def split(self):
         """
         :returns: A list of :class:`BusLetter`
         """
-        return [BusLetter(self.house_number, chr(i)) for i
-                in range(ord(self.first_bus_letter),
-                         ord(self.last_bus_letter) + 1)]
+        return [
+            BusLetter(self.house_number, chr(i))
+            for i in range(ord(self.first_bus_letter), ord(self.last_bus_letter) + 1)
+        ]
 
 
 class SingleElement(Element):
@@ -348,8 +376,9 @@ class HouseNumber(SingleElement):
     """
     A simple house number. eg: 13 or 15.
     """
+
     sequence_class = HouseNumberSequence
-    regex = re.compile(r'^(\d+)$')
+    regex = re.compile(r"^(\d+)$")
 
     def __str__(self):
         return str(self.house_number)
@@ -361,8 +390,9 @@ class BisNumber(SingleElement):
 
     eg: "3/1" or "21/5"
     """
+
     sequence_class = BisNumberSequence
-    regex = re.compile(r'^(\d+)[/_](\d+)$')
+    regex = re.compile(r"^(\d+)[/_](\d+)$")
 
     def __init__(self, house_number, bis_number, original_string):
         """
@@ -386,12 +416,14 @@ class BisNumber(SingleElement):
         return self.first_bis_number
 
     def __str__(self):
-        if '_' in self.original_string:
-            return '{house}_{bis_number}'.format(house=self.house_number,
-                                                 bis_number=self.bis_number)
+        if "_" in self.original_string:
+            return "{house}_{bis_number}".format(
+                house=self.house_number, bis_number=self.bis_number
+            )
         else:
-            return '{house}/{bis_number}'.format(house=self.house_number,
-                                                 bis_number=self.bis_number)
+            return "{house}/{bis_number}".format(
+                house=self.house_number, bis_number=self.bis_number
+            )
 
 
 class BusNumber(SingleElement):
@@ -400,8 +432,9 @@ class BusNumber(SingleElement):
 
     eg: "3 bus 1" or "53 bus 5"
     """
+
     sequence_class = BusNumberSequence
-    regex = re.compile(r'^(\d+)bus(\d+)$')
+    regex = re.compile(r"^(\d+)bus(\d+)$")
 
     def __init__(self, house_number, bus_number):
         """
@@ -418,8 +451,9 @@ class BusNumber(SingleElement):
         return self.first_bus_number
 
     def __str__(self):
-        return '{house} bus {bus_number}'.format(house=self.house_number,
-                                                 bus_number=self.bus_number)
+        return "{house} bus {bus_number}".format(
+            house=self.house_number, bus_number=self.bus_number
+        )
 
 
 class BusLetter(SingleElement):
@@ -428,8 +462,9 @@ class BusLetter(SingleElement):
 
     eg: "3 bus A" or "53 bus D"
     """
+
     sequence_class = BusLetterSequence
-    regex = re.compile(r'^(\d+)bus([a-zA-Z])$')
+    regex = re.compile(r"^(\d+)bus([a-zA-Z])$")
 
     def __init__(self, house_number, bus_letter):
         """
@@ -446,8 +481,9 @@ class BusLetter(SingleElement):
         return self.first_bus_letter
 
     def __str__(self):
-        return '{house} bus {bus_letter}'.format(house=self.house_number,
-                                                 bus_letter=self.bus_letter)
+        return "{house} bus {bus_letter}".format(
+            house=self.house_number, bus_letter=self.bus_letter
+        )
 
 
 class BisLetter(SingleElement):
@@ -456,8 +492,9 @@ class BisLetter(SingleElement):
 
     eg: "3A" or "53D"
     """
+
     sequence_class = BisLetterSequence
-    regex = re.compile(r'^(\d+)[/_]?([a-zA-Z])$')
+    regex = re.compile(r"^(\d+)[/_]?([a-zA-Z])$")
 
     def __init__(self, house_number, bis_letter):
         """
@@ -474,5 +511,6 @@ class BisLetter(SingleElement):
         return self.first_bis_letter
 
     def __str__(self):
-        return '{house}{bis_letter}'.format(house=self.house_number,
-                                            bis_letter=self.bis_letter)
+        return "{house}{bis_letter}".format(
+            house=self.house_number, bis_letter=self.bis_letter
+        )
