@@ -22,5 +22,5 @@ repos:
         ]
         types: [python]
         args: [--max-line-length=90]
-        exclude: .venv|./venv|__pycache__|setup.py
+        exclude: .venv|./venv|__pycache__
         
