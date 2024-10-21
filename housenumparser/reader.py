@@ -41,8 +41,7 @@ def read_data(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
 
     :returns: A list from of the data.
     """
-    return read_iterable(str(data).split(","), step=step,
-                         on_exc=on_exc)
+    return read_iterable(str(data).split(","), step=step, on_exc=on_exc)
 
 
 def read_iterable(inputs, step=None, on_exc=ReadException.Action.ERROR_MSG):
@@ -91,22 +90,32 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
     :returns: A :class:`.element.Element` OR an exception in case of
        incorrect data.
     """
-    element_classes = [BusNumberSequence, BusLetterSequence, BisNumberSequence,
-                       BisLetterSequence, BusNumber, BusLetter, BisNumber,
-                       BisLetter, HouseNumberSequence, HouseNumber]
-    stripped_data = re.sub(r'\s', '', data)
+    element_classes = [
+        BusNumberSequence,
+        BusLetterSequence,
+        BisNumberSequence,
+        BisLetterSequence,
+        BusNumber,
+        BusLetter,
+        BisNumber,
+        BisLetter,
+        HouseNumberSequence,
+        HouseNumber,
+    ]
+    stripped_data = re.sub(r"\s", "", data)
     exception = None
     try:
         for element_class in element_classes:
             match = element_class.regex.match(stripped_data)
             if match:
-                args = [int(group) if group.isdigit() else group
-                        for group in match.groups()]
+                args = [
+                    int(group) if group.isdigit() else group for group in match.groups()
+                ]
                 kwargs = {}
                 if element_class == HouseNumberSequence:
-                    kwargs['step'] = step
+                    kwargs["step"] = step
                 if element_class in [BisNumber, BisNumberSequence]:
-                    kwargs['original_string'] = stripped_data
+                    kwargs["original_string"] = stripped_data
                 return element_class(*args, **kwargs)
     except ValueError as e:
         exception = e
@@ -115,11 +124,10 @@ def read_element(data, step=None, on_exc=ReadException.Action.ERROR_MSG):
             msg = str(exception)
         else:
             msg = "Could not parse/understand"
-        raise ValueError(msg + ': ' + data)
+        raise ValueError(msg + ": " + data)
     elif on_exc == ReadException.Action.DROP:
         return None
-    elif on_exc in (ReadException.Action.ERROR_MSG,
-                    ReadException.Action.KEEP_ORIGINAL):
+    elif on_exc in (ReadException.Action.ERROR_MSG, ReadException.Action.KEEP_ORIGINAL):
         if exception:
             msg = str(exception)
         else:

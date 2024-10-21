@@ -17,12 +17,12 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'housenum-be-r-parser'
-copyright = '2019 Onroerend Erfgoed'  # noqa: A001 shadowed builtin
-author = 'Onroerend Erfgoed'
+project = "housenum-be-r-parser"
+copyright = "2019 Onroerend Erfgoed"  # noqa: A001 shadowed builtin
+author = "Onroerend Erfgoed"
 
 # The full version, including alpha/beta/rc tags
-release = '0.1.0'
+release = "0.1.0"
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,15 +30,12 @@ release = '0.1.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.intersphinx'
-]
+extensions = ["sphinx.ext.autodoc", "sphinx.ext.intersphinx"]
 
 nitpicky = True
 
 # Add any paths that contain templates here, relative to this directory.
-templates_path = ['']
+templates_path = [""]
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -52,7 +49,7 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 
-html_theme = 'sphinx_rtd_theme'
+html_theme = "sphinx_rtd_theme"
 # the oe theme doesn't look good for API documentation imo.
 # import oe_sphinx_theme
 # html_theme_path = [oe_sphinx_theme.get_theme_dir()]
@@ -63,12 +60,12 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = []
 
 # -- intersphinx
-intersphinx_mapping = {'py': ('https://docs.python.org/3.6', None)}
+intersphinx_mapping = {"py": ("https://docs.python.org/3.6", None)}
 
 # -- autodoc
-autoclass_content = 'both'  # This adds __init__ documentation.
+autoclass_content = "both"  # This adds __init__ documentation.
 
 # -- rtd theme
 html_theme_options = {
-    'navigation_depth': 6,
+    "navigation_depth": 6,
 }

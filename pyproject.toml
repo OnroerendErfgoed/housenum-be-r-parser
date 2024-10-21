@@ -1,0 +1,57 @@
+[build-system]
+requires = ["hatchling", "hatch-fancy-pypi-readme"]
+build-backend = "hatchling.build"
+
+[project]
+version = "0.2.0"
+name = "housenumparser"
+dynamic = ["readme"]
+authors = [
+    { name = "Flanders Heritage Agency", email = "ict@onroerenderfgoed.be" },
+]
+license = "MIT"
+description = "housenum_be_r_parser"
+requires-python = ">=3.10,<3.13"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+]
+dependencies = [
+]
+
+[project.urls]
+History = "https://github.com/OnroerendErfgoed/housenum-be-r-parser/blob/master/CHANGES.txt"
+Tracker = "https://github.com/OnroerendErfgoed/housenum-be-r-parser/issues"
+Source = "https://github.com/OnroerendErfgoed/housenum-be-r-parser"
+
+[project.optional-dependencies]
+dev = [
+    "uv==0.4.1",
+    "pytest==8.3.3",
+    "pytest-cov==5.0.0",
+    "coveralls==4.0.1",
+    "sphinx==8.0.2",
+]
+
+##
+# Build tool specific
+##
+[tool.hatch.build.targets.wheel]
+# In the wheel we want to have housenumparser in the root as python module.
+only-include = [
+    "/housenumparser",
+]
+
+[tool.hatch.metadata]
+# This allows us to use github links as dependencies
+allow-direct-references = true
+
+[tool.hatch.metadata.hooks.fancy-pypi-readme]
+content-type = "text/x-rst"
+fragments = [
+    { path = "README.rst" },
+    { path = "CHANGES.txt" },
+]
