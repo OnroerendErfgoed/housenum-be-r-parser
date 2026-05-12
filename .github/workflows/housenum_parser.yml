@@ -1,12 +1,16 @@
 name: housenumparser backend tests
 on:
-  push:
+  pull_request:
     paths:
       - housenumparser/**
       - tests/**
-      - housenumparser.yaml
+      - .github/workflows/housenum_parser.yml
       - pyproject.toml
       - requirements*.txt
+
+  push:
+    branches:
+      - main
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -35,4 +39,13 @@ jobs:
           pip install -e .
 
       - name: Python tests
-        run: pytest tests --exitfirst --capture=no -vvv --full-trace
+        run: pytest tests --cov=housenumparser --cov-report=xml --capture=no -vvv
+
+      - name: Code Coverage Report
+        if: matrix.python-version == '3.11'
+        uses: orgoro/coverage@v3.2
+        with:
+          coverageFile: coverage.xml
+          token: ${{ secrets.GITHUB_TOKEN }}
+          thresholdAll: 0.8
+          thresholdModified: 0.8
