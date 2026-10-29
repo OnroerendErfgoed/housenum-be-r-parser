@@ -1,4 +1,5 @@
 name: housenumparser backend tests
+
 on:
   pull_request:
     paths:
@@ -11,41 +12,19 @@ on:
   push:
     branches:
       - main
+
+permissions: {}
+
 jobs:
   test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        python-version: [ "3.10", "3.11", "3.12" ]
-
-    steps:
-      - uses: actions/checkout@v4
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v5
-        with:
-          python-version: ${{ matrix.python-version }}
-      # You can test your matrix by printing the current Python version
-      - name: Display Python version
-        run: python -c "import sys; print(sys.version)"
-
-      - name: Install python requirements
-        env:
-          HATCH_BUILD_NO_HOOKS: true
-        working-directory: ./
-        run: |
-          pip --version
-          pip install pip-tools
-          pip-sync requirements-dev.txt
-          pip install -e .
-
-      - name: Python tests
-        run: pytest tests --cov=housenumparser --cov-report=xml --capture=no -vvv
-
-      - name: Code Coverage Report
-        if: matrix.python-version == '3.11'
-        uses: orgoro/coverage@v3.2
-        with:
-          coverageFile: coverage.xml
-          token: ${{ secrets.GITHUB_TOKEN }}
-          thresholdAll: 0.8
-          thresholdModified: 0.8
+    uses: OnroerendErfgoed/shared-workflows/.github/workflows/python-tests.yml@v1
+    permissions:
+      contents: read
+      pull-requests: write # coverage comment
+    with:
+      runs-on: ubuntu-latest # public repo: no self-hosted runners
+      python-versions: '["3.10", "3.11", "3.12"]'
+      requirements-file: requirements-dev.txt
+      lint-command: "" # the old workflow ran no linter
+      test-command: pytest tests --cov=housenumparser --cov-report=xml:"$COVERAGE_XML" --capture=no -vvv
+      coverage-threshold-new: 0 # the old workflow didn't set it
